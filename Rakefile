@@ -16,6 +16,8 @@ Bones {
 	version  '0.2'
 
 	ignore_file  '.gitignore'
+
+	depend_on 'bones-rspec', :development => true
 }
 
 require File.join(File.dirname(__FILE__), 'spec/tasks')
