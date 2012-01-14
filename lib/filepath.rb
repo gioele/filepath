@@ -4,6 +4,8 @@
 require 'filepathlist'
 
 class FilePath
+	SEPARATOR = '/'.freeze
+
 	def initialize(path)
 		if path.is_a? FilePath
 			@fragments = path.fragments
@@ -267,7 +269,7 @@ class FilePath
 	end
 
 	def root?
-		return @fragments == ['/'] # FIXME: windows, mac
+		return @fragments == [SEPARATOR] # FIXME: windows, mac
 	end
 
 
@@ -278,7 +280,7 @@ class FilePath
 	# @return whether the current path is absolute
 
 	def absolute?
-		return @fragments.first == '/' # FIXME: windows, mac
+		return @fragments.first == SEPARATOR # FIXME: windows, mac
 	end
 
 
@@ -345,7 +347,7 @@ class FilePath
 	# @return [String] this path converted to a String
 
 	def to_raw_string
-		return @fragments.join('/').sub(%r{^//},'/') # FIXME: windows, mac
+		return @fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR) # FIXME: windows, mac
 	end
 
 	alias :to_raw_str :to_raw_string
@@ -356,7 +358,7 @@ class FilePath
 	# @note this method operates on the normalized the path
 
 	def to_s
-		return self.normalized_fragments.join('/').sub('//','/')
+		return self.normalized_fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR)
 	end
 
 
@@ -370,14 +372,14 @@ class FilePath
 
 	# @private
 	def split_path_string(raw_path)
-		fragments = raw_path.split('/') # FIXME: windows, mac
+		fragments = raw_path.split(SEPARATOR) # FIXME: windows, mac
 
-		if raw_path == '/'
-			fragments << '/'
+		if raw_path == SEPARATOR
+			fragments << SEPARATOR
 		end
 
 		if !fragments.empty? && fragments.first.empty?
-			fragments[0] = '/'
+			fragments[0] = SEPARATOR
 		end
 
 		return fragments
@@ -397,7 +399,7 @@ class FilePath
 
 		i = 0
 		while (i < frags.length)
-			if frags[i] == '..' && frags[i-1] == "/"
+			if frags[i] == '..' && frags[i-1] == SEPARATOR
 				# remove '..' fragments following a root delimiter
 				frags.delete_at(i)
 				i -= 1
