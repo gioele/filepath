@@ -232,21 +232,24 @@ class FilePath
 	def replace_extension(new_ext) # FIXME: accept block
 		if !self.extension?
 			if new_ext.nil?
-				path = self.to_s
+				new_filename = filename
 			else
-				path = self.to_s + '.' + new_ext
+				new_filename = filename.to_s + '.' + new_ext
 			end
 		else
 			if new_ext.nil?
 				pattern = /\.[^.]*?\Z/
-				path = self.to_s.sub(pattern, '')
+				new_filename = filename.to_s.sub(pattern, '')
 			else
-				pattern = '.' + extension
-				path = self.to_s.sub(pattern, '.' + new_ext)
+				pattern = Regexp.new('.' + extension + '\\Z')
+				new_filename = filename.to_s.sub(pattern, '.' + new_ext)
 			end
 		end
 
-		return FilePath.new(path)
+		frags = @fragments[0..-2]
+		frags << new_filename
+
+		return FilePath.join(frags)
 	end
 
 	alias :replace_ext :replace_extension
