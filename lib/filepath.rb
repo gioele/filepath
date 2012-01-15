@@ -88,6 +88,8 @@ class FilePath
 	#                                relative path
 	#
 	# @return [FilePath] the relative path
+	#
+	# @note this method operates on the normalized paths
 
 	def relative_to(base)
 		base = base.as_path
@@ -101,21 +103,24 @@ class FilePath
 			raise msg # FIXME: argerror error class
 		end
 
-		self_frags = self.fragments
-		base_frags = base.fragments.dup
+		self_frags = self.normalized_fragments
+		base_frags = base.normalized_fragments
+
+		base_frags_tmp = base_frags.dup
 		num_same = self_frags.find_index do |frag|
-			base_frags.delete_at(0) != frag
+			base_frags_tmp.delete_at(0) != frag
 		end
 
 		# find_index returns nil if `self` is a subset of `base`
-		num_same ||= self.fragments.length
+		num_same ||= self_frags.length
 
-		num_parent_dirs = base.fragments.length - num_same
-		left_in_self = self.fragments[num_same..-1]
+		num_parent_dirs = base_frags.length - num_same
+		left_in_self = self_frags[num_same..-1]
 
 		frags = [".."] * num_parent_dirs + left_in_self
+		normalized_frags = normalized_relative_frags(frags)
 
-		return FilePath.join(frags)
+		return FilePath.join(normalized_frags)
 	end
 
 
