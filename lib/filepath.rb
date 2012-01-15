@@ -82,9 +82,9 @@ class FilePath
 	end
 
 
-	# Calculates the relative path from another path.
+	# Calculates the relative path from a given directory.
 	#
-	# @param [FilePath, String] base the path to use as a base for the
+	# @param [FilePath, String] base the directory to use as base for the
 	#                                relative path
 	#
 	# @return [FilePath] the relative path
