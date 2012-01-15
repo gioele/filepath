@@ -27,7 +27,7 @@ class FilePath
 			raw_paths = raw_paths.first
 		end
 
-		paths = raw_paths.map { |p| FilePath.new(p) }
+		paths = raw_paths.map { |p| p.as_path }
 
 		frags = []
 		paths.each { |path| frags += path.fragments }
@@ -90,7 +90,7 @@ class FilePath
 	# @return [FilePath] the relative path
 
 	def relative_to(base)
-		base = FilePath.new(base) unless base.is_a? FilePath
+		base = base.as_path
 
 		if self.absolute? != base.absolute?
 			self_abs = self.absolute? ? "absolute" : "relative"
@@ -128,11 +128,11 @@ class FilePath
 
 	def filename
 		if self.root?
-			return FilePath.new('')
+			return ''.as_path
 		end
 
 		filename = self.normalized_fragments.last
-		return FilePath.new(filename)
+		return filename.as_path
 	end
 
 	alias :basename :filename
@@ -157,7 +157,7 @@ class FilePath
 
 	def replace_filename(new_path)
 		dir = self.parent_dir
-		return dir / FilePath.new(new_path)
+		return dir / new_path
 	end
 
 	alias :replace_basename :replace_filename
@@ -387,7 +387,7 @@ class FilePath
 	end
 
 	def ==(other)
-		return self.to_s == FilePath.new(other).to_s
+		return self.to_s == other.as_path.to_s
 	end
 
 	# @private
@@ -440,14 +440,14 @@ class FilePath
 			path = if !self.absolute?
 				self
 			else
-				FilePath.new(base_dir) / self
+				base_dir.as_path / self
 			end
 
 			return path.resolve_link
 		end
 
 		def resolve_link
-			return FilePath.new(File.readlink(self.to_s))
+			return File.readlink(self.to_s).as_path
 		end
 	end
 
