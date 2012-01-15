@@ -220,6 +220,10 @@ describe FilePath do
 		it "matches `/foo/bar` with /o\\/ba" do
 			FilePath.new('/foo/bar').should =~ /o\/b/
 		end
+
+		it "matches `/foo/bar/../quux` with /foo\\/quux/" do
+			FilePath.new('/foo/bar/../quux').should =~ /foo\/quux/
+		end
 	end
 
 	describe "#absolute?" do
