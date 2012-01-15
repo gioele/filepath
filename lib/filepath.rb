@@ -264,6 +264,16 @@ class FilePath
 	alias :remove_ext :remove_extension
 
 
+	# Matches a pattern against this path.
+	#
+	# @param [Regexp, Object] pattern the pattern to match against
+	#                                 this path
+	#
+	# @return [Fixnum, nil] the position of the pattern in the path, or
+	#                       nil if there is no match
+	#
+	# @note this method operates on the normalized path
+
 	def =~(pattern)
 		return self.to_s =~ pattern
 	end
