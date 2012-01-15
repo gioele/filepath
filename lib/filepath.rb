@@ -446,50 +446,39 @@ class FilePath
 	end
 
 	module FileInfo
-		def file?
-			FileTest.file?(self.to_s)
+		# @private
+		def self.define_filetest_method(filepath_method, filetest_method = nil)
+			filetest_method ||= filepath_method
+			define_method(filepath_method) do
+				return FileTest.send(filetest_method, self.to_s)
+			end
 		end
 
-		def link?
-			FileTest.symlink?(self.to_s)
-		end
-		alias symlink? link?
+		define_filetest_method :file?
 
-		def directory?
-			FileTest.directory?(self.to_s)
-		end
+		define_filetest_method :link?, :symlink?
+		alias :symlink? :link?
 
-		def exists?
-			FileTest.exists?(self.to_s)
-		end
-		alias exist? exists?
+		define_filetest_method :directory?
 
-		def readable?
-			FileTest.readable?(self.to_s)
-		end
+		define_filetest_method :exists?
+		alias :exist? :exists?
 
-		def writable?
-			FileTest.writable?(self.to_s)
-		end
+		define_filetest_method :readable?
 
-		def executable?
-			FileTest.executable?(self.to_s)
-		end
+		define_filetest_method :writeable?
 
-		def setgid?
-			FileTest.setgid?(self.to_s)
-		end
+		define_filetest_method :executable?
 
-		def setuid?
-			FileTest.setuid?(self.to_s)
-		end
+		define_filetest_method :setgid?
+
+		define_filetest_method :setuid?
+
+		define_filetest_method :empty?, :zero?
+		alias :zero? :empty?
 
 		def hidden?
 			@fragments.last.start_with('.') # FIXME: windows, mac
-		end
-
-		def empty?
-			FileTest.zero?(self.to_s)
 		end
 	end
 
