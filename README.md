@@ -16,7 +16,7 @@ Features and examples
 
 The main purpose of FilePath is to able to write
 
-    require __FILE_.as_path / 'spec' / 'tasks'
+    require __FILE__.as_path / 'spec' / 'tasks'
 
 instad of cumbersome code like
 
