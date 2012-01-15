@@ -376,6 +376,12 @@ class FilePath
 	end
 
 
+	# @return [FilePath] the path itself.
+	def as_path
+		self
+	end
+
+
 	def inspect
 		return '<' +  self.to_raw_string + '>'
 	end

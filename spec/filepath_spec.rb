@@ -304,6 +304,12 @@ describe FilePath do
 		end
 	end
 
+	describe "#as_path" do
+		it "returns the path itself" do
+			@root.as_path.should be(@root)
+		end
+	end
+
 	describe "#==(String)" do
 		test_data = [
 			['./', '.'],
