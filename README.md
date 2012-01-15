@@ -1,13 +1,15 @@
 FilePath
 ========
 
-`FilePath` is a class that helps dealing with files, directories and paths in
-general; a modern replacement for the standard Pathname.
+filepath is a small library that helps dealing with files, directories and
+paths in general; a modern replacement for the standard Pathname.
 
-`FilePath` instances are immutable objects with dozens of convience methods
-for common operations such as calculating relative paths, concatenating paths
-or finding all the files in a directory. There is also a companion class
-`FilePathList` to perform operations on multiple files at once.
+filepath is built around two main classes: `FilePath`, that represents paths,
+and `FilePathList`, lists of paths. The instances of these classes are
+immutable objects with dozens of convience methods for common operations such
+as calculating relative paths, concatenating paths, finding all the files in
+a directory or modifing all the extensions of a list of file names at once.
+
 
 Features and examples
 ---------------------
