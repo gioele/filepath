@@ -112,6 +112,22 @@ describe FilePath do
 		end
 	end
 
+	describe "#relative_to_file" do
+				test_data = [
+			['/a/b/c', '/a/d', 'b/c'],
+			['/a/b/c', '/a/b/c/d', '.'],
+			['/a/b/c', '/a/b/c', 'c'],
+			['a/d', 'a/b/c', '../d'],
+			['a/e/f', 'a/b/c/d', '../../e/f'],
+		]
+		test_data.each do |path, base, result|
+			it "says that `#{path}` relative to the file `#{base}` is `#{result}`" do
+				p = FilePath.new(path)
+				p.relative_to_file(base).should == result
+			end
+		end
+	end
+
 	describe "#replace_filename" do
 		test_data = [
 			['foo/bar', 'quux', 'foo/quux'],

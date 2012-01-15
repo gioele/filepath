@@ -123,6 +123,19 @@ class FilePath
 		return FilePath.join(normalized_frags)
 	end
 
+	# Calculates the relative path from a given file.
+	#
+	# @param [FilePath, String] base the file to use as base for the
+	#                                relative path
+	#
+	# @return [FilePath] the relative path
+	#
+	# @see #relative_to
+
+	def relative_to_file(base_file)
+		return relative_to(base_file.as_path.parent_dir)
+	end
+
 
 	# The filename component of the path.
 	#
