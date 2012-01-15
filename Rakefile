@@ -13,7 +13,7 @@ Bones {
 	email    'gioele@svario.it'
 	url      'http://github.com/gioele/filepath'
 
-	version  '0.2.dev'
+	version  '0.2'
 
 	ignore_file  '.gitignore'
 
