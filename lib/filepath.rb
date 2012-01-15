@@ -40,12 +40,12 @@ class FilePath
 	#
 	# @example Append a string
 	#
-	#    FilePath.new("a/b") / "c" #=> <a/b/c>
+	#    "a/b".as_path / "c" #=> <a/b/c>
 	#
 	# @example Append another FilePath
 	#
-	#    home = FilePath.new(ENV["HOME"] || "/root")
-	#    conf_dir = FilePath.new('.config')
+	#    home = (ENV["HOME"] || "/root").as_path
+	#    conf_dir = '.config'.as_path
 	#
 	#    home / conf_dir #=> </home/user/.config>
 	#
