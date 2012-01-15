@@ -81,14 +81,14 @@ describe FilePath do
 		end
 	end
 
-	describe "#relative_to(FilePath)" do
+	describe "#relative_to" do
 		test_data = [
 			['/a/b/c', '/a/b', 'c'],
 			['/a/b/c', '/a/d', '../b/c'],
 			['/a/b/c', '/a/b/c/d', '..'],
 			['/a/b/c', '/a/b/c', '.'],
-			['a/d', 'a/b/c', '../d'],
-			['a/e/f', 'a/b/c/d', '../../e/f'],
+			['a/d', 'a/b/c', '../../d'],
+			['a/e/f', 'a/b/c/d', '../../../e/f'],
 			['a/c', 'a/b/..', 'c'],
 		]
 		test_data.each do |path, base, result|

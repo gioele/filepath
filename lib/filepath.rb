@@ -428,7 +428,7 @@ class FilePath
 				# remove '..' fragments following a root delimiter
 				frags.delete_at(i)
 				i -= 1
-			elsif frags[i] == '..' && frags[i-1] != '..'
+			elsif frags[i] == '..' && frags[i-1] != '..' && i >= 1
 				# remove every fragment followed by a ".." marker
 				frags.delete_at(i)
 				frags.delete_at(i-1)
