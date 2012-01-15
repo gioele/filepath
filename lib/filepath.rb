@@ -489,7 +489,7 @@ class FilePath
 		end
 	end
 
-	module DirectoyMethods
+	module DirectoryMethods
 		def entries(pattern = '*')
 			if !self.directory?
 				raise Errno::ENOTDIR.new(self.to_s)
@@ -518,7 +518,7 @@ class FilePath
 	include PathResolution
 	include FileInfo
 	include FileManipulationMethods
-	include DirectoyMethods
+	include DirectoryMethods
 end
 
 class String
