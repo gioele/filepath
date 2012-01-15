@@ -329,11 +329,7 @@ class FilePath
 	# @yield [path] TODO
 
 	def ascend(max_depth = nil, &block)
-		max_depth ||= @fragments.length
-		(1..max_depth).reverse_each do |limit|
-			frags = @fragments.take(limit)
-			yield FilePath.join(frags)
-		end
+		iterate(max_depth, :reverse_each, &block)
 	end
 
 	# Iterates over all the directory that lead to the current path.
@@ -344,8 +340,13 @@ class FilePath
 	# @yield [path] TODO
 
 	def descend(max_depth = nil, &block)
+		iterate(max_depth, :each, &block)
+	end
+
+	# @private
+	def iterate(max_depth, method, &block)
 		max_depth ||= @fragments.length
-		(1..max_depth).each do |limit|
+		(1..max_depth).send(method) do |limit|
 			frags = @fragments.take(limit)
 			yield FilePath.join(frags)
 		end
