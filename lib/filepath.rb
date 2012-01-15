@@ -366,7 +366,7 @@ class FilePath
 
 	# @return [String] this path converted to a String
 	#
-	# @note this method operates on the normalized the path
+	# @note this method operates on the normalized path
 
 	def to_s
 		return self.normalized_fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR)
