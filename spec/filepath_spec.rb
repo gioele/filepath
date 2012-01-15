@@ -239,6 +239,26 @@ describe FilePath do
 		end
 	end
 
+	describe "#normalized" do
+		test_data = [
+			['a', 'a'],
+			['a/b/c', 'a/b/c'],
+			['a/../c', 'c'],
+			['a/b/..', 'a'],
+			['../a', '../a'],
+			['../../a', '../../a'],
+			['../a/..', '..'],
+			['/', '/'],
+			['/..', '/'],
+			['/../../../a', '/a'],
+		]
+		test_data.each do |path, result|
+			it "turns `#{path}` into `#{result}`" do
+				FilePath.new(path).normalized.to_raw_string.should == result
+			end
+		end
+	end
+
 	describe "#ascend" do
 		it "goes through all the fragments of an absolute path" do
 			steps = []
