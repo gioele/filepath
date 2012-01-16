@@ -4,6 +4,12 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe FilePathList do
+	describe "#exclude" do
+		list = FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar})
+		refined = list.exclude(/bar$/)
+		refined.each { |path| path.extension.should == 'foo' }
+	end
+
 	describe "#/" do
 		it "adds the same string to all the paths" do
 			list = FilePathList.new(%w{foo faa}) / 'bar'
