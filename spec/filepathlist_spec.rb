@@ -12,6 +12,21 @@ describe FilePathList do
 		end
 	end
 
+	describe "#+" do
+		it "concatenates two FilePathLists" do
+			list1 = FilePathList.new(%w{a b c})
+			list2 = FilePathList.new(%w{d e})
+
+			list = list1 + list2
+			list.should have(5).items
+			list[0].should eq('a')
+			list[1].should eq('b')
+			list[2].should eq('c')
+			list[3].should eq('d')
+			list[4].should eq('e')
+		end
+	end
+
 	describe "#*" do
 		describe "calculates the cartesian product between" do
 			it "two FilePathLists" do
