@@ -107,7 +107,7 @@ describe FilePath do
 		test_data2.each do |path, base|
 			it "raise an exception because `#{path}` and `#{base}` have different prefixes" do
 				p = FilePath.new(path)
-				expect { p.relative_to(base) }.to raise_error
+				expect { p.relative_to(base) }.to raise_error(ArgumentError)
 			end
 		end
 	end

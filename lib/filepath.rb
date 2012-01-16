@@ -100,7 +100,7 @@ class FilePath
 			msg = "cannot compare: "
 			msg += "`#{self}` is #{self_abs} while "
 			msg += "`#{base}` is #{base_abs}"
-			raise msg # FIXME: argerror error class
+			raise ArgumentError, msg
 		end
 
 		self_frags = self.normalized_fragments
