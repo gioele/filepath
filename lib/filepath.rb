@@ -379,7 +379,7 @@ class FilePath
 	# @return [String] this path converted to a String
 
 	def to_raw_string
-		return @fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR) # FIXME: windows, mac
+		@to_raw_string ||= @fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR) # FIXME: windows, mac
 	end
 
 	alias :to_raw_str :to_raw_string
@@ -390,7 +390,7 @@ class FilePath
 	# @note this method operates on the normalized path
 
 	def to_s
-		return self.normalized_fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR)
+		@to_str ||= self.normalized_fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR)
 	end
 
 
