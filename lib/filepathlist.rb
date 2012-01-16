@@ -51,6 +51,10 @@ class FilePathList
 		return FilePathList.new(paths)
 	end
 
+	def to_a
+		@entries
+	end
+
 	# FIXME: delegate :to => @entries
 	def [](index)
 		@entries[index]
