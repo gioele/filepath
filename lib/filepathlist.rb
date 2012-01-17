@@ -4,6 +4,8 @@
 class FilePathList
 	include Enumerable
 
+	SEPARATOR = ':'.freeze
+
 	def initialize(raw_entries = nil)
 		raw_entries ||= []
 		@entries = raw_entries.map { |e| FilePath.new(e) }
@@ -53,6 +55,10 @@ class FilePathList
 
 	def to_a
 		@entries
+	end
+
+	def to_s
+		@to_s ||= @entries.map(&:to_s).join(SEPARATOR)
 	end
 
 	# FIXME: delegate :to => @entries

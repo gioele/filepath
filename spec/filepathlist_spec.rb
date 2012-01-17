@@ -83,4 +83,11 @@ describe FilePathList do
 			list.should include("a/c")
 		end
 	end
+
+	describe "#to_s" do
+		it "returns files separated by a comma`" do
+			list = FilePathList.new(%w{a/b a/c /a/d})
+			list.to_s.should == "a/b:a/c:/a/d"
+		end
+	end
 end
