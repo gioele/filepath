@@ -425,7 +425,7 @@ class FilePath
 
 	# @private
 	def normalized_fragments
-		normalized_relative_frags(self.fragments)
+		@normalized_fragments ||= normalized_relative_frags(self.fragments)
 	end
 
 	# @private
