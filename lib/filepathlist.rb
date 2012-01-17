@@ -41,7 +41,8 @@ class FilePathList
 		return FilePathList.new(@entries + extra_entries.to_a)
 	end
 
-	def <<(extra_path) # TODO: implement
+	def <<(extra_path)
+		return FilePathList.new(@entries + [extra_path.as_path])
 	end
 
 	def *(other_list)

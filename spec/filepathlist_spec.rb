@@ -33,6 +33,20 @@ describe FilePathList do
 		end
 	end
 
+	describe "#<<" do
+		it "adds a new to path to a existing FilePathList" do
+			list1 = FilePathList.new(%w{a/b /c/d})
+			list2 = list1 << "e/f"
+
+			list1.should have(2).items
+			list2.should have(3).items
+
+			list2[0].should eq('a/b')
+			list2[1].should eq('/c/d')
+			list2[2].should eq('e/f')
+		end
+	end
+
 	describe "#*" do
 		describe "calculates the cartesian product between" do
 			it "two FilePathLists" do
