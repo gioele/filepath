@@ -91,6 +91,40 @@ describe FilePathList do
 		end
 	end
 
+	describe "#remove_common_fragments" do
+		it "works on lists of files from the same dir" do
+			paths = %w{a/b/x1 a/b/x2 a/b/x3}
+			list = FilePathList.new(paths).remove_common_fragments
+
+			list.should have(3).items
+			list.should include(*%w{x1 x2 x3})
+		end
+
+		it "works on lists of files from different dirs" do
+			list1 = FilePathList.new(%w{a/b/x1 a/b/c/x2 a/b/d/e/x3})
+			list2 = list1.remove_common_fragments
+
+			list2.should have(3).items
+			list2.should include(*%w{x1 c/x2 d/e/x3})
+		end
+
+		it "works on lists of files with no common fragments" do
+			paths = %w{a/b a/d g/f}
+			list1 = FilePathList.new(paths)
+			list2 = list1.remove_common_fragments
+
+			list1.should == list2
+		end
+
+		it "works on lists that contain duplicates only" do
+			paths = %w{a/b a/b a/b}
+			list1 = FilePathList.new(paths)
+			list2 = list1.remove_common_fragments
+
+			list2.should == FilePathList.new(['.', '.', '.'])
+		end
+	end
+
 	describe "#include?" do
 		it "says that `a/c` in included in [<a/b>, <a/c>, </a/d>]" do
 			list = FilePathList.new(%w{a/b a/c /a/d})

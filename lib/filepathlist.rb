@@ -54,12 +54,39 @@ class FilePathList
 		return FilePathList.new(paths)
 	end
 
+	def remove_common_fragments
+		all_frags = @entries.map(&:fragments)
+		max_length = all_frags.map(&:length).min
+
+		idx_different = nil
+
+		(0..max_length).each do |i|
+			fragment = all_frags.first[i]
+
+			different = all_frags.any? { |frags| frags[i] != fragment }
+			if different
+				idx_different = i
+				break
+			end
+		end
+
+		idx_different ||= max_length
+
+		remaining_frags = all_frags.map { |frags| frags[idx_different..-1] }
+
+		return FilePathList.new(remaining_frags)
+	end
+
 	def to_a
 		@entries
 	end
 
 	def to_s
 		@to_s ||= @entries.map(&:to_s).join(SEPARATOR)
+	end
+
+	def ==(other)
+		@entries == other.to_a # FIXME: entries, non-list
 	end
 
 	# FIXME: delegate :to => @entries
