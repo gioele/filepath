@@ -231,7 +231,7 @@ class FilePath
 		end
 	end
 
-	alias ext? extension?
+	alias :ext? :extension?
 
 
 	# @overload replace_extension(new_ext)
@@ -338,6 +338,7 @@ class FilePath
 	def normalized
 		return FilePath.join(self.normalized_fragments)
 	end
+
 	alias :normalised :normalized
 
 
