@@ -139,3 +139,16 @@ describe FilePathList do
 		end
 	end
 end
+
+
+describe Array do
+	describe "#as_path_list" do
+		it "generates a FilePathList from an Array" do
+			paths = %w{/a/b c/d /f/g}
+			list = paths.as_path_list
+
+			list.should be_a(FilePathList)
+			list.should include(*paths)
+		end
+	end
+end

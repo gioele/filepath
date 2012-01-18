@@ -110,3 +110,9 @@ class FilePathList
 		@entries.inspect
 	end
 end
+
+class Array
+	def as_path_list
+		FilePathList.new(self)
+	end
+end
