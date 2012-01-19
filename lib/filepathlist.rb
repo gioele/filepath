@@ -94,6 +94,10 @@ class FilePathList
 		@entries[index]
 	end
 
+	def empty?
+		@entries.empty?
+	end
+
 	def include?(*others)
 		@entries.include?(*others)
 	end

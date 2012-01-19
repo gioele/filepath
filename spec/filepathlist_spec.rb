@@ -8,7 +8,7 @@ describe FilePathList do
 		it "creates an empty FilePathList" do
 			list = FilePathList.new()
 
-			list.should have(0).items
+			list.should be_empty
 		end
 
 		it "creates a FilePathList from an Array of Strings" do
