@@ -90,7 +90,7 @@ class FilePathList
 	end
 
 	def ==(other)
-		@entries == other.to_a # FIXME: entries, non-list
+		@entries == other.as_path_list.to_a
 	end
 
 	# FIXME: delegate :to => @entries

@@ -170,6 +170,23 @@ describe FilePathList do
 			list.to_s.should == "a/b:a/c:/a/d"
 		end
 	end
+
+	describe "#==" do
+		let(:list) { ['a/b', 'c/d', 'e/f'].as_path_list }
+
+		it "compares a FilePathList to another FilePathList" do
+			list2 = FilePathList.new << 'a/b' << 'c/d' << 'e/f'
+			list3 = list2 << 'g/h'
+
+			list.should == list2
+			list.should_not == list3
+		end
+
+		it "compares a FilePathList to an Array of Strings" do
+			list.should == %w{a/b c/d e/f}
+			list.should_not == %w{a/a b/b c/c}
+		end
+	end
 end
 
 
