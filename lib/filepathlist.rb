@@ -8,7 +8,7 @@ class FilePathList
 
 	def initialize(raw_entries = nil)
 		raw_entries ||= []
-		@entries = raw_entries.map { |e| FilePath.new(e) }
+		@entries = raw_entries.map { |e| e.as_path }
 	end
 
 	def select_entries(type)

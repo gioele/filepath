@@ -4,6 +4,38 @@
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe FilePathList do
+	describe "#initialize" do
+		it "creates an empty FilePathList" do
+			list = FilePathList.new()
+
+			list.should have(0).items
+		end
+
+		it "creates a FilePathList from an Array of Strings" do
+			paths = %w{a/b c/d e/f}
+			list = FilePathList.new(paths)
+
+			list.should have(3).items
+			list.each { |path| path.should be_a(FilePath) }
+		end
+
+		it "creates a FilePathList from an Array of FilePaths" do
+			paths = %w{a/b c/d e/f}.map(&:as_path)
+			list = FilePathList.new(paths)
+
+			list.should have(3).items
+			list.each { |path| path.should be_a(FilePath) }
+		end
+
+		it "creates a FilePathList from an Array of Arrays" do
+			paths = [%w{a b}, %w{c d}, %w{e f}]
+			list = FilePathList.new(paths)
+
+			list.should have(3).items
+			list.each { |path| path.should be_a(FilePath) }
+		end
+	end
+
 	describe "#exclude" do
 		list = FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar})
 		refined = list.exclude(/bar$/)
