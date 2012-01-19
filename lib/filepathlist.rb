@@ -77,6 +77,8 @@ class FilePathList
 		return FilePathList.new(remaining_frags)
 	end
 
+	# @return [FilePathList] the path list itself
+
 	def as_path_list
 		self
 	end
@@ -120,6 +122,19 @@ class FilePathList
 end
 
 class Array
+	# Generates a path list from an array of paths.
+	#
+	# The elements of the array must respond to `#as_path`.
+	#
+	# `ary.as_path` is equivalent to `FilePathList.new(ary)`.
+	#
+	# @return [FilePathList] a new path list containing the elements of
+	#                        the array as FilePaths
+	#
+	# @see String#as_path
+	# @see Array#as_path
+	# @see FilePath#as_path
+
 	def as_path_list
 		FilePathList.new(self)
 	end
