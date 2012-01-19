@@ -421,8 +421,8 @@ describe FilePath do
 		end
 	end
 
-	describe "methods that operate on directories" do
-		describe "#select_entries" do
+	describe FilePath::DirectoryMethods do
+		describe "#entries" do
 			it "raises when path is not a directory" do
 				expect { (@root / 'f1').entries(:files) }.to raise_error(Errno::ENOTDIR)
 			end
@@ -433,11 +433,11 @@ describe FilePath do
 				@root.files.should have(1).item
 			end
 
-			it "finds 2 files in directory `d1`" do
+			it "finds 2 files in directory <d1>" do
 				(@root / 'd1').files.should have(2).items
 			end
 
-			it "finds no files in directory `d1/d12`" do
+			it "finds no files in directory <d1/d12>" do
 				(@root / 'd1' / 'd12').files.should have(0).items
 			end
 		end
@@ -447,11 +447,11 @@ describe FilePath do
 				@root.directories.should have(4).items
 			end
 
-			it "finds 2 directories in directory `d2`" do
+			it "finds 2 directories in directory <d2>" do
 				(@root / 'd2').directories.should have(2).items
 			end
 
-			it "finds no directories in directory `d1/d13" do
+			it "finds no directories in directory <d1/d13>" do
 				(@root / 'd1' / 'd13').directories.should have(0).items
 			end
 		end
@@ -461,7 +461,7 @@ describe FilePath do
 				@root.links.should have(0).items
 			end
 
-			it "finds 1 link in directory `d1`" do
+			it "finds 1 link in directory <d1>" do
 				(@root / 'd1').links.should have(1).item
 			end
 		end
