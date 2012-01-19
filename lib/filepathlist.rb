@@ -77,6 +77,10 @@ class FilePathList
 		return FilePathList.new(remaining_frags)
 	end
 
+	def as_path_list
+		self
+	end
+
 	def to_a
 		@entries
 	end
