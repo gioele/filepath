@@ -158,7 +158,7 @@ describe FilePathList do
 	end
 
 	describe "#include?" do
-		it "says that `a/c` in included in [<a/b>, <a/c>, </a/d>]" do
+		it "says that 'a/c' is included in [<a/b>, <a/c>, </a/d>]" do
 			list = FilePathList.new(%w{a/b a/c /a/d})
 			list.should include("a/c")
 		end
