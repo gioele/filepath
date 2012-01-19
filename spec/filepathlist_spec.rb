@@ -178,13 +178,13 @@ describe FilePathList do
 			list2 = FilePathList.new << 'a/b' << 'c/d' << 'e/f'
 			list3 = list2 << 'g/h'
 
-			list.should == list2
-			list.should_not == list3
+			list.should eq(list2)
+			list.should_not eq(list3)
 		end
 
 		it "compares a FilePathList to an Array of Strings" do
-			list.should == %w{a/b c/d e/f}
-			list.should_not == %w{a/a b/b c/c}
+			list.should eq(%w{a/b c/d e/f})
+			list.should_not eq(%w{a/a b/b c/c})
 		end
 	end
 end
