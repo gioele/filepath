@@ -406,7 +406,7 @@ class FilePath
 	end
 
 	def ==(other)
-		return self.to_s == other.as_path.to_s
+		return self.normalized_fragments == other.as_path.normalized_fragments
 	end
 
 	# @private
