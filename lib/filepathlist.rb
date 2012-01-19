@@ -91,34 +91,33 @@ class FilePathList
 		@to_s ||= @entries.map(&:to_s).join(SEPARATOR)
 	end
 
+	def inspect
+		@entries.inspect
+	end
+
 	def ==(other)
 		@entries == other.as_path_list.to_a
 	end
 
-	# FIXME: delegate :to => @entries
-	def [](index)
-		@entries[index]
+	module ArrayMethods
+		def self.define_array_method(name)
+			define_method(name) do |*args, &block|
+				return @entries.send(name, *args, &block)
+			end
+		end
+
+		define_array_method :[]
+
+		define_array_method :empty?
+
+		define_array_method :include?
+
+		define_array_method :each
+
+		define_array_method :map
 	end
 
-	def empty?
-		@entries.empty?
-	end
-
-	def include?(*others)
-		@entries.include?(*others)
-	end
-
-	def each(&block)
-		@entries.each(&block)
-	end
-
-	def map(&block)
-		@entries.map(&block)
-	end
-
-	def inspect
-		@entries.inspect
-	end
+	include ArrayMethods
 end
 
 class Array
