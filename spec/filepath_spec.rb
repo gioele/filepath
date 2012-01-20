@@ -181,11 +181,17 @@ describe FilePath do
 				FilePath.new(path).extension?.should be_false
 			end
 		end
-	end
 
-	describe "#extension?(String)" do
-		it "says that `foo.bar` extesions is `bar`" do
-			FilePath.new('foo.bar').extension?('bar').should be_true
+		extension_data = [
+			['foo.bar', 'bar'],
+			['/foo/bar.', ''],
+			['foo/bar.baz.conf', 'conf'],
+			['foo.bar.boom', /oo/],
+		]
+		extension_data.each do |path, ext|
+			it "says that <#{path}> extesions is #{ext.inspect}" do
+				FilePath.new(path).extension?(ext).should be_true
+			end
 		end
 
 		it "says that `foo.bar` extension is not `baz`" do
