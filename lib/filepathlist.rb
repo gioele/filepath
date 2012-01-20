@@ -28,11 +28,6 @@ class FilePathList
 		return select_entries(:directory)
 	end
 
-	def exclude(pattern) # FIXME: block
-		raw_entries = @entries.delete_if { |e| e =~ pattern }
-		return FilePathList.new(raw_entries)
-	end
-
 	def /(extra_path)
 		return self.map { |path| path / extra_path }
 	end
@@ -40,6 +35,17 @@ class FilePathList
 	def +(extra_entries)
 		return FilePathList.new(@entries + extra_entries.to_a)
 	end
+
+	def -(others) # FIXME: block
+		if others.is_a? Regexp # FIXME: support any object that responds to =~
+			remaining_entries = @entries.delete_if { |e| e =~ others }
+		else
+			remaining_entries = @entries - others.as_path_list.to_a
+		end
+
+		return FilePathList.new(remaining_entries)
+	end
+	alias :exclude :-
 
 	def <<(extra_path)
 		return FilePathList.new(@entries + [extra_path.as_path])

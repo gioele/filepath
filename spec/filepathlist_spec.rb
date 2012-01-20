@@ -65,6 +65,16 @@ describe FilePathList do
 		end
 	end
 
+	describe "#-" do
+		it "removes a list (as array of strings) from another list" do
+			list1 = FilePathList.new(%w{a/b /a/c e/d})
+			list2 = list1 - %w{a/b e/d}
+
+			list2.should have(1).item
+			list2[0].should eq('/a/c')
+		end
+	end
+
 	describe "#<<" do
 		it "adds a new to path to a existing FilePathList" do
 			list1 = FilePathList.new(%w{a/b /c/d})
