@@ -470,14 +470,20 @@ class FilePath
 
 	module PathResolution
 		def absolute_path(base_dir = Dir.pwd) # FIXME: rename to `#absolute`?
-			path = if !self.absolute?
-				self
-			else
-				base_dir.as_path / self
+			if self.absolute?
+				return self
 			end
+
+			return base_dir.as_path / self
+		end
+
+		def real_path(base_dir = Dir.pwd)
+			path = absolute_path(base_dir)
 
 			return path.resolve_link
 		end
+
+		alias :realpath :real_path
 
 		def resolve_link
 			return File.readlink(self.to_s).as_path

@@ -429,8 +429,22 @@ describe FilePath do
 
 	describe FilePath::PathResolution do
 		describe "#absolute_path" do
-			it "resolves `d1/l11` to `/dev/null`" do
-				(@root / 'd1' / 'l11').absolute_path.should == '/dev/null'
+			test_data = [
+				['d1/l11', File.expand_path('d1/l11', FIXTURES_DIR), FIXTURES_DIR],
+				['/foo/bar', '/foo/bar', '.'],
+			]
+			test_data.each do |path, abs_path, cwd|
+				it "resolves <#{path}> to <#{abs_path}> (in #{cwd})" do
+					Dir.chdir(cwd) do # FIXME
+						FilePath.new(path).absolute_path.should == abs_path
+					end
+				end
+			end
+		end
+
+		describe "#real_path" do
+			it "resolves <d1/l11> to </dev/null>" do
+				(@root / 'd1' / 'l11').real_path.should == '/dev/null'
 			end
 		end
 	end
