@@ -369,6 +369,60 @@ describe FilePath do
 		end
 	end
 
+	describe "#eql?" do
+		it "is always true when an object is compared to itself" do
+			ph = 'foo/bar/baz'.as_path
+
+			ph.should eql(ph)
+		end
+
+		it "matches two different object representing the same path" do
+			p1 = '/foo/bar'.as_path
+			p2 = '/foo/bar'.as_path
+
+			p1.should eql(p2)
+		end
+
+		it "does not match different objects representing different paths" do
+			p1 = '/foo/bar'.as_path
+			p2 = '/foo/bar/baz'.as_path
+
+			p1.should_not eql(p2)
+		end
+
+		it "does not match objects that are not FilePaths" do
+			p1 = '/foo/bar/baz'.as_path
+			p2 = '/foo/bar/baz'
+
+			p1.should eq(p2)
+			p1.should_not eql(p2)
+		end
+	end
+
+	describe "#hash" do
+		it "has the same value for similar paths" do
+			p1 = '/foo/bar'.as_path
+			p2 = '/foo/bar'.as_path
+
+			p1.hash.should == p2.hash
+		end
+
+		it "has different values for different paths" do
+			p1 = '/foo/bar'.as_path
+			p2 = 'foo/quuz'.as_path
+
+			p1.hash.should_not == p2.hash
+		end
+
+		it "has different values for different paths with same normalized path" do
+			p1 = '/foo/bar/..'.as_path
+			p2 = '/foo'.as_path
+
+			p1.should eq(p2)
+			p1.hash.should_not eq(p2.hash)
+		end
+	end
+
 	describe FilePath::PathResolution do
 		describe "#absolute_path" do
 			it "resolves `d1/l11` to `/dev/null`" do

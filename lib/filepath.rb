@@ -409,6 +409,20 @@ class FilePath
 		return self.normalized_fragments == other.as_path.normalized_fragments
 	end
 
+	def eql?(other)
+		if self.equal?(other)
+			return true
+		elsif self.class != other.class
+			return false
+		end
+
+		return self.fragments == other.fragments
+	end
+
+	def hash
+		return self.fragments.hash
+	end
+
 	# @private
 	def split_path_string(raw_path)
 		fragments = raw_path.split(SEPARATOR) # FIXME: windows, mac
