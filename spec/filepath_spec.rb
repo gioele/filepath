@@ -160,28 +160,26 @@ describe FilePath do
 	end
 
 	describe "#extension?" do
-		it "says that `foo.bar` has an extension" do
-			FilePath.new('foo.bar').extension?.should be_true
+		with_extension = [
+			'foo.bar',
+			'foo.',
+			'.foo.conf',
+		]
+		with_extension.each do |path|
+			it "says that <#{path}> has an extension" do
+				FilePath.new(path).extension?.should be_true
+			end
 		end
 
-		it "says that `foo.` has an extension" do
-			FilePath.new('foo.').extension?.should be_true
-		end
-
-		it "says that `foo` has no extension" do
-			FilePath.new('foo').extension?.should be_false
-		end
-
-		it "says that `foo.bar/baz` has no extension" do
-			FilePath.new('foo.bar/baz').extension?.should be_false
-		end
-
-		it "says that `.foo` has no extension" do
-			FilePath.new('.foo').extension?.should be_false
-		end
-
-		it "says that `.foo.conf` has no extension" do
-			FilePath.new('.foo.conf').extension?.should be_true
+		no_extension = [
+			'foo',
+			'foo.bar/baz',
+			'.foo',
+		]
+		no_extension.each do |path|
+			it "says that <#{path}> has no extension" do
+				FilePath.new(path).extension?.should be_false
+			end
 		end
 	end
 
