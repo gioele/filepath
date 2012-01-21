@@ -530,7 +530,7 @@ class FilePath
 		alias :zero? :empty?
 
 		def hidden?
-			@fragments.last.start_with('.') # FIXME: windows, mac
+			@fragments.last.start_with?('.') # FIXME: windows, mac
 		end
 	end
 

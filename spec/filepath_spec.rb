@@ -510,6 +510,29 @@ describe FilePath do
 				@root.should be_directory
 			end
 		end
+
+		describe "#hidden?" do
+			hidden_paths = [
+				'.foorc',
+				'foo/.bar',
+				'.foo.bar',
+			]
+			hidden_paths.each do |path|
+				it "says that <#{path}> is an hidden file" do
+					path.as_path.should be_hidden
+				end
+			end
+
+			non_hidden_paths = [
+				'foo.bar',
+				'foo/.bar/baz',
+			]
+			non_hidden_paths.each do |path|
+				it "says that <#{path}> not an hidden file" do
+					path.as_path.should_not be_hidden
+				end
+			end
+		end
 	end
 
 	describe FilePath::DirectoryMethods do
