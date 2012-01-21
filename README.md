@@ -48,7 +48,7 @@ The main features of FilePath are…
 
     converted_img = image.replace_extension("jpeg")
     converted_img.to_s     #=> "/home/gioele/Documents/images/cat.jpeg"
-    convert(image.to_s, converted_img.to_s)
+    convert(image, converted_img)
 
 ### Path traversal
 

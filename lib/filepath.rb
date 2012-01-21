@@ -12,7 +12,7 @@ class FilePath
 		elsif path.is_a? Array
 			@fragments = path
 		else
-			@fragments = split_path_string(path.to_s)
+			@fragments = split_path_string(path.to_str)
 		end
 	end
 
@@ -498,7 +498,7 @@ class FilePath
 		alias :realpath :real_path
 
 		def resolve_link
-			return File.readlink(self.to_s).as_path
+			return File.readlink(self).as_path
 		end
 	end
 
@@ -507,7 +507,7 @@ class FilePath
 		def self.define_filetest_method(filepath_method, filetest_method = nil)
 			filetest_method ||= filepath_method
 			define_method(filepath_method) do
-				return FileTest.send(filetest_method, self.to_s)
+				return FileTest.send(filetest_method, self)
 			end
 		end
 
@@ -541,22 +541,22 @@ class FilePath
 
 	module FileManipulationMethods
 		def open(*args, &block)
-			File.open(self.to_s, *args, &block)
+			File.open(self, *args, &block)
 		end
 
 		def touch
 			self.open('a') do ; end
-			File.utime(File.atime(self.to_s), Time.now, self.to_s)
+			File.utime(File.atime(self), Time.now, self)
 		end
 	end
 
 	module DirectoryMethods
 		def entries(pattern = '*')
 			if !self.directory?
-				raise Errno::ENOTDIR.new(self.to_s)
+				raise Errno::ENOTDIR.new(self)
 			end
 
-			raw_entries = Dir.glob((self / pattern).to_s)
+			raw_entries = Dir.glob((self / pattern))
 			entries = FilePathList.new(raw_entries)
 
 			return entries
