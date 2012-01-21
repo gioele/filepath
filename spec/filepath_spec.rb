@@ -544,7 +544,7 @@ describe FilePath do
 			end
 
 			after(:each) do
-				File.delete(ph.to_s) if File.exists?(ph.to_s)
+				File.delete(ph) if File.exists?(ph)
 			end
 
 			it "creates an empty file" do
@@ -553,17 +553,17 @@ describe FilePath do
 			end
 
 			it "updates the modification date of an existing file", :broken => true do
-				File.open(ph.to_s, "w+") { |file| file << "abc" }
-				File.utime(0, Time.now - 3200, ph.to_s)
+				File.open(ph, "w+") { |file| file << "abc" }
+				File.utime(0, Time.now - 3200, ph)
 
-				before_stat = File.stat(ph.to_s)
+				before_stat = File.stat(ph)
 				before_time = Time.now
 
 				#sleep(5) # let Ruby flush its stat buffer to the disk
 				ph.touch
 
 				after_time = Time.now
-				after_stat = File.stat(ph.to_s)
+				after_stat = File.stat(ph)
 
 				before_stat.should_not eq(after_stat)
 
