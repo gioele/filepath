@@ -5,6 +5,7 @@ require 'filepath'
 require 'filepathlist'
 
 RSpec.configure do |config|
+	config.filter_run_excluding :broken => true
 end
 
 FIXTURES_DIR = File.join(%w{spec fixtures})
