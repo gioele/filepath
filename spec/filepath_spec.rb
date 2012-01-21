@@ -50,6 +50,20 @@ describe FilePath do
 		end
 	end
 
+	describe "#join" do
+		test_data = [
+			['', ['bar'], './bar'],
+			['foo/quux', ['bar', 'baz'], 'foo/quux/bar/baz'],
+			['/', ['a', 'b', 'c'], '/a/b/c'],
+		]
+		test_data.each do |base, extra, result|
+			args = extra.map { |x| x.inspect }.join(',')
+			it "appends #{args} to '#{base}' to get <#{result}>" do
+				base.as_path.join(*extra).should == result
+			end
+		end
+	end
+
 	describe "filename" do
 		test_data = [
 			['/foo/bar', 'bar'],
