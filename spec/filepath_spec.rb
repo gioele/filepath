@@ -535,6 +535,44 @@ describe FilePath do
 		end
 	end
 
+	describe FilePath::FileManipulationMethods do
+		describe "#touch" do
+			let(:ph) { @root / 'd1' / 'test-touch' }
+
+			before(:each) do
+				ph.should_not exist
+			end
+
+			after(:each) do
+				File.delete(ph.to_s) if File.exists?(ph.to_s)
+			end
+
+			it "creates an empty file" do
+				ph.touch
+				ph.should exist
+			end
+
+			it "updates the modification date of an existing file", :broken => true do
+				File.open(ph.to_s, "w+") { |file| file << "abc" }
+				File.utime(0, Time.now - 3200, ph.to_s)
+
+				before_stat = File.stat(ph.to_s)
+				before_time = Time.now
+
+				#sleep(5) # let Ruby flush its stat buffer to the disk
+				ph.touch
+
+				after_time = Time.now
+				after_stat = File.stat(ph.to_s)
+
+				before_stat.should_not eq(after_stat)
+
+				after_stat.size.should eq(before_stat.size)
+				after_stat.mtime.should be_between(before_time, after_time)
+			end
+		end
+	end
+
 	describe FilePath::DirectoryMethods do
 		describe "#entries" do
 			it "raises when path is not a directory" do

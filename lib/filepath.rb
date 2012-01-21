@@ -540,7 +540,8 @@ class FilePath
 		end
 
 		def touch
-			self.open do ; end
+			self.open('a') do ; end
+			File.utime(File.atime(self.to_s), Time.now, self.to_s)
 		end
 	end
 
