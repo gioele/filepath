@@ -94,7 +94,7 @@ class FilePathList
 	end
 
 	def to_s
-		@to_s ||= @entries.map(&:to_s).join(SEPARATOR)
+		@to_s ||= @entries.map(&:to_str).join(SEPARATOR)
 	end
 
 	def inspect
