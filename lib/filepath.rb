@@ -391,6 +391,11 @@ class FilePath
 	# @note this method operates on the normalized path
 
 	def to_s
+		to_str
+	end
+
+
+	def to_str
 		@to_str ||= join_fragments(self.normalized_fragments)
 	end
 
