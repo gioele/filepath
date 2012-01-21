@@ -380,7 +380,7 @@ class FilePath
 	# @return [String] this path converted to a String
 
 	def to_raw_string
-		@to_raw_string ||= @fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR) # FIXME: windows, mac
+		@to_raw_string ||= join_fragments(@fragments)
 	end
 
 	alias :to_raw_str :to_raw_string
@@ -391,7 +391,7 @@ class FilePath
 	# @note this method operates on the normalized path
 
 	def to_s
-		@to_str ||= self.normalized_fragments.join(SEPARATOR).sub(%r{^//}, SEPARATOR)
+		@to_str ||= join_fragments(self.normalized_fragments)
 	end
 
 
@@ -466,6 +466,13 @@ class FilePath
 		end
 
 		return frags
+	end
+
+	# @private
+	def join_fragments(frags)
+		# FIXME: windows, mac
+		# FIXME: avoid string substitutions and regexen
+		return frags.join(SEPARATOR).sub(%r{^//}, SEPARATOR).sub(/\A\Z/, '.')
 	end
 
 	module PathResolution

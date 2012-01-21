@@ -23,6 +23,7 @@ describe FilePath do
 			['foo', '.', 'foo'],
 			['foo', '..', '.'],
 			['foo/bar', 'baz', 'foo/bar/baz'],
+			['', 'foo/bar', './foo/bar'],
 		]
 		test_data.each do |base, extra, result|
 			it "concatenates `#{base}` and `#{extra}` (as String) into `#{result}`" do
@@ -344,6 +345,10 @@ describe FilePath do
 
 		it "returns normalized paths" do
 			FilePath.new("/foo/bar/..").to_s.should eql('/foo')
+		end
+
+		it "returns '.' for empty paths" do
+			FilePath.new('').to_s.should eql('.')
 		end
 	end
 
