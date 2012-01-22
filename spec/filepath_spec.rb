@@ -585,6 +585,10 @@ describe FilePath do
 				@root.files.should have(1).item
 			end
 
+			it "finds 3 files in the root directory and its sub directories" do
+				@root.files(true).should have(3).item
+			end
+
 			it "finds 2 files in directory <d1>" do
 				(@root / 'd1').files.should have(2).items
 			end
@@ -597,6 +601,10 @@ describe FilePath do
 		describe "#directories" do
 			it "finds 4 directories in the root directory" do
 				@root.directories.should have(4).items
+			end
+
+			it "finds 9 directories in the root directory and its sub directories" do
+				@root.directories(true).should have(9).item
 			end
 
 			it "finds 2 directories in directory <d2>" do

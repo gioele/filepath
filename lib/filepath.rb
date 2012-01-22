@@ -551,28 +551,32 @@ class FilePath
 	end
 
 	module DirectoryMethods
-		def entries(pattern = '*')
+		def entries(pattern = '*', recursive = false)
 			if !self.directory?
 				raise Errno::ENOTDIR.new(self)
 			end
 
-			raw_entries = Dir.glob((self / pattern))
+			glob = self
+			glob /= '**' if recursive
+			glob /= pattern
+
+			raw_entries = Dir.glob(glob)
 			entries = FilePathList.new(raw_entries)
 
 			return entries
 		end
 		alias :glob :entries
 
-		def files
-			entries.select_entries(:file)
+		def files(recursive = false)
+			entries('*', recursive).select_entries(:file)
 		end
 
-		def links
-			entries.select_entries(:link)
+		def links(recursive = false)
+			entries('*', recursive).select_entries(:link)
 		end
 
-		def directories
-			entries.select_entries(:directory)
+		def directories(recursive = false)
+			entries('*', recursive).select_entries(:directory)
 		end
 	end
 
