@@ -167,11 +167,20 @@ class FilePath
 
 	# Replace the path filename with the supplied path.
 	#
+	# @example
+	#
+	#     post = "posts/2012-02-16-hello-world/index.md".as_path
+	#     style = post.replace_filename("style.css")
+	#     style.to_s #=> "posts/2012-02-16-hello-world/style.css"
+	#
 	# @param [FilePath, String] new_path the path to be put in place of
 	#                                    the current filename
 	#
 	# @return [FilePath] a path with the supplied path instead of the
 	#                    current filename
+	#
+	# @see #filename
+	# @see #replace_extension
 
 	def replace_filename(new_path)
 		dir = self.parent_dir
@@ -187,6 +196,8 @@ class FilePath
 	#
 	# @return [String] the extension of the file or nil if the file has no
 	#                  extension
+	#
+	# @see #extension?
 
 	def extension
 		filename = @fragments.last
@@ -234,9 +245,28 @@ class FilePath
 	alias :ext? :extension?
 
 
+	# Replaces or removes the file extension.
+	#
+	# @see #extension
+	# @see #extension?
+	# @see #remove_extension
+	# @see #replace_filename
+	#
 	# @overload replace_extension(new_ext)
 	#     Replaces the file extension with the supplied one. If the file
 	#     has no extension it is added to the file name together with a dot.
+	#
+	#     @example Extension replacement
+	#
+	#         src_path = "pages/about.markdown".as_path
+	#         html_path = src_path.replace_extension("html")
+	#         html_path.to_s #=> "pages/about.html"
+	#
+	#     @example Extension addition
+	#
+	#         base = "style/main-style".as_path
+	#         sass_style = base.replace_extension("sass")
+	#         sass_style.to_s #=> "style/main-style.sass"
 	#
 	#     @param [String] new_ext the new extension
 	#
@@ -244,6 +274,15 @@ class FilePath
 	#
 	# @overload replace_extension
 	#     Removes the file extension if present.
+	#
+	#     The {#remove_extension} method provides the same functionality
+	#     but has a more meaningful name.
+	#
+	#     @example
+	#
+	#         post_file = "post/welcome.html"
+	#         post_url = post_file.replace_extension(nil)
+	#         post_url.to_s #=> "post/welcome"
 	#
 	#     @return [FilePath] a new path without the extension
 
@@ -276,7 +315,15 @@ class FilePath
 
 	# Removes the file extension if present.
 	#
+	# @example
+	#
+	#     post_file = "post/welcome.html"
+	#     post_url = post_file.remove_extension
+	#     post_url.to_s #=> "post/welcome"
+	#
 	# @return [FilePath] a new path without the extension
+	#
+	# @see #replace_extension
 
 	def remove_extension
 		return replace_ext(nil)
@@ -306,9 +353,17 @@ class FilePath
 
 	# Is this path absolute?
 	#
+	# @example
+	#
+	#     "/tmp".absolute?   #=> true
+	#     "tmp".absolute?    #=> false
+	#     "../tmp".absolute? #=> false
+	#
 	# FIXME: document what an absolute path is.
 	#
 	# @return whether the current path is absolute
+	#
+	# @see #relative?
 
 	def absolute?
 		return @fragments.first == SEPARATOR # FIXME: windows, mac
@@ -317,9 +372,17 @@ class FilePath
 
 	# Is this path relative?
 	#
+	# @example
+	#
+	#     "/tmp".relative?   #=> false
+	#     "tmp".relative?    #=> true
+	#     "../tmp".relative? #=> true
+	#
 	# FIXME: document what a relative path is.
 	#
 	# @return whether the current path is relative
+	#
+	# @see #absolute?
 
 	def relative?
 		return !self.absolute?
@@ -329,6 +392,13 @@ class FilePath
 	# Simplify paths that contain `.` and `..`.
 	#
 	# The resulting path will be in normal form.
+	#
+	# @example
+	#
+	#     path = $ENV["HOME"] / ".." / "jack" / "."
+	#
+	#     path #=> </home/gioele/../jack/.>
+	#     path.normalized #=> </home/jack>
 	#
 	# FIXME: document what normal form is.
 	#
@@ -345,25 +415,65 @@ class FilePath
 	# Iterates over all the path directories, from the current path to
 	# the root.
 	#
+	# @example
+	#
+	#     web_dir = "/srv/example.org/web/html/".as_path
+	#     web_dir.ascend do |path|
+	#         is = path.readable? ? "is" : "is NOT"
+	#
+	#         puts "#{path} #{is} readable"
+	#     end
+	#
+	#     # produces
+	#     #
+	#     # /srv/example.org/web/html is NOT redable
+	#     # /srv/example.org/web is NOT readable
+	#     # /srv/example.org is readable
+	#     # /srv is readable
+	#     # / is readable
+	#
 	# @param max_depth the maximum depth to ascend to, nil to ascend
 	#                  without limits.
 	#
 	# @yield [path] TODO
+	#
+	# @see #descend
 
 	def ascend(max_depth = nil, &block)
 		iterate(max_depth, :reverse_each, &block)
 	end
 
+
 	# Iterates over all the directory that lead to the current path.
+	#
+	# @example
+	#
+	#     web_dir = "/srv/example.org/web/html/".as_path
+	#     web_dir.descend do |path|
+	#         is = path.readable? ? "is" : "is NOT"
+	#
+	#         puts "#{path} #{is} readable"
+	#     end
+	#
+	#     # produces
+	#     #
+	#     # / is readable
+	#     # /srv is readable
+	#     # /srv/example.org is readable
+	#     # /srv/example.org/web is NOT readable
+	#     # /srv/example.org/web/html is NOT redable
 	#
 	# @param max_depth the maximum depth to descent to, nil to descend
 	#                  without limits.
 	#
 	# @yield [path] TODO
+	#
+	# @see #ascend
 
 	def descend(max_depth = nil, &block)
 		iterate(max_depth, :each, &block)
 	end
+
 
 	# @private
 	def iterate(max_depth, method, &block)
@@ -375,9 +485,17 @@ class FilePath
 	end
 
 
-	# This path converted to a String
+	# This path converted to a String.
+	#
+	# @example differences between #to_raw_string and #to_s
+	#
+	#    path = "/home/gioele/.config".as_path / ".." / ".cache"
+	#    path.to_raw_string #=> "/home/gioele/config/../.cache"
+	#    path.to_s #=> "/home/gioele/.cache"
 	#
 	# @return [String] this path converted to a String
+	#
+	# @see #to_s
 
 	def to_raw_string
 		@to_raw_string ||= join_fragments(@fragments)
@@ -591,6 +709,10 @@ class String
 	#
 	# `"/a/b/c".as_path` is equivalent to `FilePath.new("/a/b/c")`.
 	#
+	# @example FilePath from a string
+	#
+	#     "/etc/ssl/certs".as_path #=> </etc/ssl/certs>
+	#
 	# @return [FilePath] a new path generated from the string
 	#
 	# @note FIXME: `#as_path` should be `#to_path` but that method name
@@ -601,9 +723,18 @@ class String
 end
 
 class Array
-	# Generates a path using the elements of an Array as path fragments.
+	# Generates a path using the elements of an array as path fragments.
 	#
-	# `%w{a b c}.as_path` is equivalent to `FilePath.join('a', 'b', 'c')`.
+	# `[a, b, c].as_path` is equivalent to `FilePath.join(a, b, c)`.
+	#
+	# @example FilePath from an array of strings
+	#
+	#     ["/", "foo", "bar"].as_path #=> </foo/bar>
+	#
+	# @example FilePath from an array of strings and other FilePaths
+	#
+	#     server_dir = config["root_dir"] / "server"
+	#     ["..", config_dir, "secret"].as_path #=> <../config/server/secret>
 	#
 	# @return [FilePath] a new path generated using the element as path
 	#         fragments
