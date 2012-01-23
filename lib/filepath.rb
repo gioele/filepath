@@ -287,26 +287,28 @@ class FilePath
 	#     @return [FilePath] a new path without the extension
 
 	def replace_extension(new_ext) # FIXME: accept block
+		orig_filename = filename.to_s
+
 		if !self.extension?
 			if new_ext.nil?
-				new_filename = filename
+				new_filename = orig_filename
 			else
-				new_filename = filename.to_s + '.' + new_ext
+				new_filename = orig_filename + '.' + new_ext
 			end
 		else
 			if new_ext.nil?
 				pattern = /\.[^.]*?\Z/
-				new_filename = filename.to_s.sub(pattern, '')
+				new_filename = orig_filename.sub(pattern, '')
 			else
 				pattern = Regexp.new('.' + extension + '\\Z')
-				new_filename = filename.to_s.sub(pattern, '.' + new_ext)
+				new_filename = orig_filename.sub(pattern, '.' + new_ext)
 			end
 		end
 
 		frags = @fragments[0..-2]
 		frags << new_filename
 
-		return FilePath.join(frags)
+		return FilePath.new(frags)
 	end
 
 	alias :replace_ext :replace_extension
