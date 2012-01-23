@@ -319,6 +319,11 @@ describe FilePath do
 			steps[1].should eq("a/b")
 			steps[2].should eq("a")
 		end
+
+		it "returns the path itself" do
+			path = FilePath.new("/a/b/c/")
+			path.ascend { }.should be(path)
+		end
 	end
 
 	describe "#descend" do
@@ -345,6 +350,11 @@ describe FilePath do
 			steps[0].should eq("a")
 			steps[1].should eq("a/b")
 			steps[2].should eq("a/b/c")
+		end
+
+		it "returns the path itself" do
+			path = FilePath.new("/a/b/c/")
+			path.descend { }.should be(path)
 		end
 	end
 

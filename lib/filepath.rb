@@ -437,6 +437,8 @@ class FilePath
 	#
 	# @yield [path] TODO
 	#
+	# @return [FilePath] the path itself.
+	#
 	# @see #descend
 
 	def ascend(max_depth = nil, &block)
@@ -468,6 +470,8 @@ class FilePath
 	#
 	# @yield [path] TODO
 	#
+	# @return [FilePath] the path itself.
+	#
 	# @see #ascend
 
 	def descend(max_depth = nil, &block)
@@ -482,6 +486,8 @@ class FilePath
 			frags = @fragments.take(limit)
 			yield FilePath.join(frags)
 		end
+
+		return self
 	end
 
 
