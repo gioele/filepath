@@ -80,6 +80,16 @@ describe FilePathList do
 		end
 	end
 
+	describe "#select" do
+		it "keeps all the paths for which the block returns true" do
+			list = FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar})
+			remaining = list.select { |ph| ph.extension?('bar') }
+
+			remaining.should have(2).items
+			remaining.each { |ph| ph.extension.should == 'bar' }
+		end
+	end
+
 	describe "#<<" do
 		it "adds a new to path to a existing FilePathList" do
 			list1 = FilePathList.new(%w{a/b /c/d})

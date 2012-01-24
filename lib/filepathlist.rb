@@ -47,6 +47,12 @@ class FilePathList
 	end
 	alias :exclude :-
 
+	def select(&block)
+		remaining_entries = @entries.select { |e| yield e }
+
+		return FilePathList.new(remaining_entries)
+	end
+
 	def <<(extra_path)
 		return FilePathList.new(@entries + [extra_path.as_path])
 	end
