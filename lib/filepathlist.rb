@@ -121,6 +121,8 @@ class FilePathList
 		define_array_method :each
 
 		define_array_method :map
+
+		define_array_method :size
 	end
 
 	include ArrayMethods
