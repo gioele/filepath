@@ -36,19 +36,26 @@ class FilePathList
 		return FilePathList.new(@entries + extra_entries.to_a)
 	end
 
-	def -(others) # FIXME: block
-		if others.is_a? Regexp # FIXME: support any object that responds to =~
-			remaining_entries = @entries.delete_if { |e| e =~ others }
-		else
-			remaining_entries = @entries - others.as_path_list.to_a
-		end
+	def -(others)
+		remaining_entries = @entries - others.as_path_list.to_a
 
 		return FilePathList.new(remaining_entries)
 	end
-	alias :exclude :-
 
-	def select(&block)
-		remaining_entries = @entries.select { |e| yield e }
+	def exclude(pattern = nil, &block)
+		if block_given?
+			select { |e| !block.call(e) }
+		else
+			select { |e| !(e =~ pattern) }
+		end
+	end
+
+	def select(pattern = nil, &block)
+		if !block_given?
+			block = proc { |e| e =~ pattern }
+		end
+
+		remaining_entries = @entries.select { |e| block.call(e) }
 
 		return FilePathList.new(remaining_entries)
 	end

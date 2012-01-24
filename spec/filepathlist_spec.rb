@@ -36,17 +36,6 @@ describe FilePathList do
 		end
 	end
 
-	describe "#exclude" do
-		it "excludes paths matching a Regex" do
-			list = FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar})
-			refined = list.exclude(/bar$/)
-
-			refined.should be_a FilePathList
-			refined.should have(3).items
-			refined.each { |path| path.extension.should == 'foo' }
-		end
-	end
-
 	describe "#/" do
 		it "adds the same string to all the paths" do
 			list = FilePathList.new(%w{foo faa}) / 'bar'
@@ -80,9 +69,38 @@ describe FilePathList do
 		end
 	end
 
+	describe "#exclude" do
+		let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
+
+		it "excludes paths matching a Regex" do
+			remaining = list.exclude(/bar$/)
+
+			remaining.should be_a FilePathList
+			remaining.should have(3).items
+			remaining.each { |path| path.extension.should == 'foo' }
+		end
+
+		it "excludes all the paths for which the block returns true" do
+			remaining = list.exclude { |path| path.extension?('bar') }
+
+			remaining.should be_a FilePathList
+			remaining.should have(3).items
+			remaining.each { |path| path.extension.should == 'foo' }
+		end
+	end
+
 	describe "#select" do
+		let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
+
+		it "keeps paths matching a Regex" do
+			remaining = list.select(/bar$/)
+
+			remaining.should be_a FilePathList
+			remaining.should have(2).items
+			remaining.each { |path| path.extension.should == 'bar' }
+		end
+
 		it "keeps all the paths for which the block returns true" do
-			list = FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar})
 			remaining = list.select { |ph| ph.extension?('bar') }
 
 			remaining.should have(2).items
