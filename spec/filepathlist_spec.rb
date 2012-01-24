@@ -37,9 +37,14 @@ describe FilePathList do
 	end
 
 	describe "#exclude" do
-		list = FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar})
-		refined = list.exclude(/bar$/)
-		refined.each { |path| path.extension.should == 'foo' }
+		it "excludes paths matching a Regex" do
+			list = FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar})
+			refined = list.exclude(/bar$/)
+
+			refined.should be_a FilePathList
+			refined.should have(3).items
+			refined.each { |path| path.extension.should == 'foo' }
+		end
 	end
 
 	describe "#/" do
