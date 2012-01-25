@@ -579,6 +579,30 @@ class FilePath
 	end
 
 
+	# Checks whether two paths are equivalent.
+	#
+	# Two paths are equivalent when they have the same normalized segments.
+	#
+	# A relative and an absolute path will always be considered different.
+	# To compare relative paths to absolute path, expand first the relative
+	# path using {#absolute_path} or {#real_path}.
+	#
+	# @example
+	#
+	#     path1 = "foo/bar".as_path
+	#     path2 = "foo/bar/baz".as_path
+	#     path3 = "foo/bar/baz/../../bar".as_path
+	#
+	#     path1 == path2            #=> false
+	#     path1 == path2.parent_dir #=> true
+	#     path1 == path3            #=> true
+	#
+	# @param [FilePath, String] other the other path to compare
+	#
+	# @return [boolean] whether the other path is equivalent to the current path
+	#
+	# @note this method compares the normalized versions of the paths
+
 	def ==(other)
 		return self.normalized_segments == other.as_path.normalized_segments
 	end
