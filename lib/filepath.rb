@@ -84,12 +84,34 @@ class FilePath
 
 	# Calculates the relative path from a given directory.
 	#
+	# @example relative paths between relative paths
+	#
+	#     posts_dir = "posts".as_path
+	#     images_dir = "static/images".as_path
+	#
+	#     logo = images_dir / 'logo.png'
+	#
+	#     logo.relative_to(posts_dir) #=> <../static/images/logo.png>
+	#
+	# @example relative paths between absolute paths
+	#
+	#     home_dir = "/home/gioele".as_path
+	#     docs_dir = "/home/gioele/Documents".as_path
+	#     tmp_dir = "/tmp".as_path
+	#
+	#     docs_dir.relative_to(home_dir) #=> <Documents>
+	#     home_dir.relative_to(docs_dir) #=> <..>
+	#
+	#     tmp_dir.relative_to(home_dir) #=> <../../tmp>
+	#
 	# @param [FilePath, String] base the directory to use as base for the
 	#                                relative path
 	#
 	# @return [FilePath] the relative path
 	#
 	# @note this method operates on the normalized paths
+	#
+	# @see #relative_to_file
 
 	def relative_to(base)
 		base = base.as_path
@@ -124,6 +146,23 @@ class FilePath
 	end
 
 	# Calculates the relative path from a given file.
+	#
+	# @example relative paths between relative paths
+	#
+	#     post = "posts/2012-02-14-hello.html".as_path
+	#     images_dir = "static/images".as_path
+	#
+	#     rel_img_dir = images_dir.relative_to_file(post)
+	#     rel_img_dir.to_s #=> "../static/images"
+	#
+	#     logo = rel_img_dir / 'logo.png' #=> <../static/images/logo.png>
+	#
+	# @example relative paths between absolute paths
+	#
+	#     rc_file = "/home/gioele/.bashrc".as_path
+	#     tmp_dir = "/tmp".as_path
+	#
+	#     tmp_dir.relative_to_file(rc_file) #=> <../../tmp>
 	#
 	# @param [FilePath, String] base the file to use as base for the
 	#                                relative path
