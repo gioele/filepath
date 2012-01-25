@@ -264,6 +264,24 @@ describe FilePath do
 		end
 	end
 
+	describe "#root?" do
+		it "says that </> points to the root directory" do
+			FilePath.new('/').should be_root
+		end
+
+		it "says that </..> points to the root directory" do
+			FilePath.new('/..').should be_root
+		end
+
+		it "says that <a/b> does not point to the root directory" do
+			FilePath.new('a/b').should_not be_root
+		end
+
+		it "says that </foo> does not point to the root directory" do
+			FilePath.new('/foo/bar').should_not be_root
+		end
+	end
+
 	describe "#absolute?" do
 		it "says that `/foo/bar` is absolute" do
 			FilePath.new('/foo/bar').should be_absolute

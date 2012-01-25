@@ -388,8 +388,15 @@ class FilePath
 		return self.to_s =~ pattern
 	end
 
+
+	# Is this path pointing to the root directory?
+	#
+	# @return whether the path points to the root directory
+	#
+	# @note this method operates on the normalized paths
+
 	def root?
-		return @segments == [SEPARATOR] # FIXME: windows, mac
+		return self.normalized_segments == [SEPARATOR] # FIXME: windows, mac
 	end
 
 
