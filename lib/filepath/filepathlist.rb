@@ -111,6 +111,8 @@ class FilePathList
 		@to_s ||= @entries.map(&:to_str).join(SEPARATOR)
 	end
 
+
+	# @private
 	def inspect
 		@entries.inspect
 	end
@@ -120,6 +122,7 @@ class FilePathList
 	end
 
 	module ArrayMethods
+		# @private
 		def self.define_array_method(name)
 			define_method(name) do |*args, &block|
 				return @entries.send(name, *args, &block)

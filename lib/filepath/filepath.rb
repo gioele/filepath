@@ -15,7 +15,9 @@ class FilePath
 		end
 	end
 
+	# @private
 	attr_reader :segments
+
 
 	# Creates a FilePath joining the given segments.
 	#
@@ -559,6 +561,7 @@ class FilePath
 	end
 
 
+	# @private
 	def to_str
 		@to_str ||= join_segments(self.normalized_segments)
 	end
@@ -570,14 +573,18 @@ class FilePath
 	end
 
 
+	# @private
 	def inspect
 		return '<' +  self.to_raw_string + '>'
 	end
+
 
 	def ==(other)
 		return self.normalized_segments == other.as_path.normalized_segments
 	end
 
+
+	# @private
 	def eql?(other)
 		if self.equal?(other)
 			return true
@@ -588,6 +595,7 @@ class FilePath
 		return @segments == other.segments
 	end
 
+	# @private
 	def hash
 		return @segments.hash
 	end
