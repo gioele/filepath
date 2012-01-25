@@ -295,7 +295,7 @@ describe FilePath do
 	end
 
 	describe "#ascend" do
-		it "goes through all the fragments of an absolute path" do
+		it "goes through all the segments of an absolute path" do
 			steps = []
 			FilePath.new("/a/b/c").ascend do |p|
 				steps << p
@@ -308,7 +308,7 @@ describe FilePath do
 			steps[3].should eq("/")
 		end
 
-		it "goes through all the fragments of a relative path" do
+		it "goes through all the segments of a relative path" do
 			steps = []
 			FilePath.new("a/b/c").ascend do |p|
 				steps << p
@@ -327,7 +327,7 @@ describe FilePath do
 	end
 
 	describe "#descend" do
-		it "goes through all the fragments of an absolute path" do
+		it "goes through all the segments of an absolute path" do
 			steps = []
 			FilePath.new("/a/b/c").descend do |p|
 				steps << p
@@ -340,7 +340,7 @@ describe FilePath do
 			steps[3].should eq("/a/b/c")
 		end
 
-		it "goes through all the fragments of a relative path" do
+		it "goes through all the segments of a relative path" do
 			steps = []
 			FilePath.new("a/b/c").descend do |p|
 				steps << p

@@ -8,19 +8,19 @@ class FilePath
 
 	def initialize(path)
 		if path.is_a? FilePath
-			@fragments = path.fragments
+			@segments = path.segments
 		elsif path.is_a? Array
-			@fragments = path
+			@segments = path
 		else
-			@fragments = split_path_string(path.to_str)
+			@segments = split_path_string(path.to_str)
 		end
 	end
 
-	attr_reader :fragments
+	attr_reader :segments
 
-	# Creates a FilePath joining the given fragments.
+	# Creates a FilePath joining the given segments.
 	#
-	# @return [FilePath] a FilePath created joining the given fragments
+	# @return [FilePath] a FilePath created joining the given segments
 
 	def FilePath.join(*raw_paths)
 		if (raw_paths.count == 1) && (raw_paths.first.is_a? Array)
@@ -30,7 +30,7 @@ class FilePath
 		paths = raw_paths.map { |p| p.as_path }
 
 		frags = []
-		paths.each { |path| frags += path.fragments }
+		paths.each { |path| frags += path.segments }
 
 		return FilePath.new(frags)
 	end
@@ -125,8 +125,8 @@ class FilePath
 			raise ArgumentError, msg
 		end
 
-		self_frags = self.normalized_fragments
-		base_frags = base.normalized_fragments
+		self_frags = self.normalized_segments
+		base_frags = base.normalized_segments
 
 		base_frags_tmp = base_frags.dup
 		num_same = self_frags.find_index do |frag|
@@ -188,7 +188,7 @@ class FilePath
 			return ''.as_path
 		end
 
-		filename = self.normalized_fragments.last
+		filename = self.normalized_segments.last
 		return filename.as_path
 	end
 
@@ -239,7 +239,7 @@ class FilePath
 	# @see #extension?
 
 	def extension
-		filename = @fragments.last
+		filename = @segments.last
 
 		num_dots = filename.count('.')
 
@@ -344,7 +344,7 @@ class FilePath
 			end
 		end
 
-		frags = @fragments[0..-2]
+		frags = @segments[0..-2]
 		frags << new_filename
 
 		return FilePath.new(frags)
@@ -388,7 +388,7 @@ class FilePath
 	end
 
 	def root?
-		return @fragments == [SEPARATOR] # FIXME: windows, mac
+		return @segments == [SEPARATOR] # FIXME: windows, mac
 	end
 
 
@@ -407,7 +407,7 @@ class FilePath
 	# @see #relative?
 
 	def absolute?
-		return @fragments.first == SEPARATOR # FIXME: windows, mac
+		return @segments.first == SEPARATOR # FIXME: windows, mac
 	end
 
 
@@ -444,10 +444,10 @@ class FilePath
 	# FIXME: document what normal form is.
 	#
 	# @return [FilePath] a new path that does not contain `.` or `..`
-	#                    fragments.
+	#                    segments.
 
 	def normalized
-		return FilePath.join(self.normalized_fragments)
+		return FilePath.join(self.normalized_segments)
 	end
 
 	alias :normalised :normalized
@@ -522,9 +522,9 @@ class FilePath
 
 	# @private
 	def iterate(max_depth, method, &block)
-		max_depth ||= @fragments.length
+		max_depth ||= @segments.length
 		(1..max_depth).send(method) do |limit|
-			frags = @fragments.take(limit)
+			frags = @segments.take(limit)
 			yield FilePath.join(frags)
 		end
 
@@ -545,7 +545,7 @@ class FilePath
 	# @see #to_s
 
 	def to_raw_string
-		@to_raw_string ||= join_fragments(@fragments)
+		@to_raw_string ||= join_segments(@segments)
 	end
 
 	alias :to_raw_str :to_raw_string
@@ -561,7 +561,7 @@ class FilePath
 
 
 	def to_str
-		@to_str ||= join_fragments(self.normalized_fragments)
+		@to_str ||= join_segments(self.normalized_segments)
 	end
 
 
@@ -576,7 +576,7 @@ class FilePath
 	end
 
 	def ==(other)
-		return self.normalized_fragments == other.as_path.normalized_fragments
+		return self.normalized_segments == other.as_path.normalized_segments
 	end
 
 	def eql?(other)
@@ -586,31 +586,31 @@ class FilePath
 			return false
 		end
 
-		return self.fragments == other.fragments
+		return @segments == other.segments
 	end
 
 	def hash
-		return self.fragments.hash
+		return @segments.hash
 	end
 
 	# @private
 	def split_path_string(raw_path)
-		fragments = raw_path.split(SEPARATOR) # FIXME: windows, mac
+		segments = raw_path.split(SEPARATOR) # FIXME: windows, mac
 
 		if raw_path == SEPARATOR
-			fragments << SEPARATOR
+			segments << SEPARATOR
 		end
 
-		if !fragments.empty? && fragments.first.empty?
-			fragments[0] = SEPARATOR
+		if !segments.empty? && segments.first.empty?
+			segments[0] = SEPARATOR
 		end
 
-		return fragments
+		return segments
 	end
 
 	# @private
-	def normalized_fragments
-		@normalized_fragments ||= normalized_relative_frags(self.fragments)
+	def normalized_segments
+		@normalized_segments ||= normalized_relative_frags(@segments)
 	end
 
 	# @private
@@ -623,11 +623,11 @@ class FilePath
 		i = 0
 		while (i < frags.length)
 			if frags[i] == '..' && frags[i-1] == SEPARATOR
-				# remove '..' fragments following a root delimiter
+				# remove '..' segments following a root delimiter
 				frags.delete_at(i)
 				i -= 1
 			elsif frags[i] == '..' && frags[i-1] != '..' && i >= 1
-				# remove every fragment followed by a ".." marker
+				# remove every segment followed by a ".." marker
 				frags.delete_at(i)
 				frags.delete_at(i-1)
 				i -= 2
@@ -639,7 +639,7 @@ class FilePath
 	end
 
 	# @private
-	def join_fragments(frags)
+	def join_segments(frags)
 		# FIXME: windows, mac
 		# FIXME: avoid string substitutions and regexen
 		return frags.join(SEPARATOR).sub(%r{^//}, SEPARATOR).sub(/\A\Z/, '.')
@@ -700,7 +700,7 @@ class FilePath
 		alias :zero? :empty?
 
 		def hidden?
-			@fragments.last.start_with?('.') # FIXME: windows, mac
+			@segments.last.start_with?('.') # FIXME: windows, mac
 		end
 	end
 
@@ -782,7 +782,7 @@ class String
 end
 
 class Array
-	# Generates a path using the elements of an array as path fragments.
+	# Generates a path using the elements of an array as path segments.
 	#
 	# `[a, b, c].as_path` is equivalent to `FilePath.join(a, b, c)`.
 	#
@@ -796,7 +796,7 @@ class Array
 	#     ["..", config_dir, "secret"].as_path #=> <../config/server/secret>
 	#
 	# @return [FilePath] a new path generated using the element as path
-	#         fragments
+	#         segments
 	#
 	# @note FIXME: `#as_path` should be `#to_path` but that method name
 	#       is already used

@@ -166,10 +166,10 @@ describe FilePathList do
 		end
 	end
 
-	describe "#remove_common_fragments" do
+	describe "#remove_common_segments" do
 		it "works on lists of files from the same dir" do
 			paths = %w{a/b/x1 a/b/x2 a/b/x3}
-			list = FilePathList.new(paths).remove_common_fragments
+			list = FilePathList.new(paths).remove_common_segments
 
 			list.should have(3).items
 			list.should include(*%w{x1 x2 x3})
@@ -177,16 +177,16 @@ describe FilePathList do
 
 		it "works on lists of files from different dirs" do
 			list1 = FilePathList.new(%w{a/b/x1 a/b/c/x2 a/b/d/e/x3})
-			list2 = list1.remove_common_fragments
+			list2 = list1.remove_common_segments
 
 			list2.should have(3).items
 			list2.should include(*%w{x1 c/x2 d/e/x3})
 		end
 
-		it "works on lists of files with no common fragments" do
+		it "works on lists of files with no common segments" do
 			paths = %w{a/b a/d g/f}
 			list1 = FilePathList.new(paths)
-			list2 = list1.remove_common_fragments
+			list2 = list1.remove_common_segments
 
 			list1.should == list2
 		end
@@ -194,7 +194,7 @@ describe FilePathList do
 		it "works on lists that contain duplicates only" do
 			paths = %w{a/b a/b a/b}
 			list1 = FilePathList.new(paths)
-			list2 = list1.remove_common_fragments
+			list2 = list1.remove_common_segments
 
 			list2.should == FilePathList.new(['.', '.', '.'])
 		end
