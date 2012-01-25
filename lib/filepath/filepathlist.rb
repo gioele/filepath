@@ -75,15 +75,15 @@ class FilePathList
 	end
 
 	def remove_common_segments
-		all_frags = @entries.map(&:segments)
-		max_length = all_frags.map(&:length).min
+		all_segs = @entries.map(&:segments)
+		max_length = all_segs.map(&:length).min
 
 		idx_different = nil
 
 		(0..max_length).each do |i|
-			segment = all_frags.first[i]
+			segment = all_segs.first[i]
 
-			different = all_frags.any? { |frags| frags[i] != segment }
+			different = all_segs.any? { |segs| segs[i] != segment }
 			if different
 				idx_different = i
 				break
@@ -92,9 +92,9 @@ class FilePathList
 
 		idx_different ||= max_length
 
-		remaining_frags = all_frags.map { |frags| frags[idx_different..-1] }
+		remaining_segs = all_segs.map { |segs| segs[idx_different..-1] }
 
-		return FilePathList.new(remaining_frags)
+		return FilePathList.new(remaining_segs)
 	end
 
 	# @return [FilePathList] the path list itself

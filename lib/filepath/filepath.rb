@@ -30,10 +30,10 @@ class FilePath
 
 		paths = raw_paths.map { |p| p.as_path }
 
-		frags = []
-		paths.each { |path| frags += path.segments }
+		segs = []
+		paths.each { |path| segs += path.segments }
 
-		return FilePath.new(frags)
+		return FilePath.new(segs)
 	end
 
 
@@ -126,24 +126,24 @@ class FilePath
 			raise ArgumentError, msg
 		end
 
-		self_frags = self.normalized_segments
-		base_frags = base.normalized_segments
+		self_segs = self.normalized_segments
+		base_segs = base.normalized_segments
 
-		base_frags_tmp = base_frags.dup
-		num_same = self_frags.find_index do |frag|
-			base_frags_tmp.delete_at(0) != frag
+		base_segs_tmp = base_segs.dup
+		num_same = self_segs.find_index do |seg|
+			base_segs_tmp.delete_at(0) != seg
 		end
 
 		# find_index returns nil if `self` is a subset of `base`
-		num_same ||= self_frags.length
+		num_same ||= self_segs.length
 
-		num_parent_dirs = base_frags.length - num_same
-		left_in_self = self_frags[num_same..-1]
+		num_parent_dirs = base_segs.length - num_same
+		left_in_self = self_segs[num_same..-1]
 
-		frags = [".."] * num_parent_dirs + left_in_self
-		normalized_frags = normalized_relative_frags(frags)
+		segs = [".."] * num_parent_dirs + left_in_self
+		normalized_segs = normalized_relative_segs(segs)
 
-		return FilePath.join(normalized_frags)
+		return FilePath.join(normalized_segs)
 	end
 
 	# Calculates the relative path from a given file.
@@ -345,10 +345,10 @@ class FilePath
 			end
 		end
 
-		frags = @segments[0..-2]
-		frags << new_filename
+		segs = @segments[0..-2]
+		segs << new_filename
 
-		return FilePath.new(frags)
+		return FilePath.new(segs)
 	end
 
 	alias :replace_ext :replace_extension
@@ -525,8 +525,8 @@ class FilePath
 	def iterate(max_depth, method, &block)
 		max_depth ||= @segments.length
 		(1..max_depth).send(method) do |limit|
-			frags = @segments.take(limit)
-			yield FilePath.join(frags)
+			segs = @segments.take(limit)
+			yield FilePath.join(segs)
 		end
 
 		return self
@@ -641,39 +641,39 @@ class FilePath
 
 	# @private
 	def normalized_segments
-		@normalized_segments ||= normalized_relative_frags(@segments)
+		@normalized_segments ||= normalized_relative_segs(@segments)
 	end
 
 	# @private
-	def normalized_relative_frags(orig_frags)
-		frags = orig_frags.dup
+	def normalized_relative_segs(orig_segs)
+		segs = orig_segs.dup
 
 		# remove "current dir" markers
-		frags.delete('.')
+		segs.delete('.')
 
 		i = 0
-		while (i < frags.length)
-			if frags[i] == '..' && frags[i-1] == SEPARATOR
+		while (i < segs.length)
+			if segs[i] == '..' && segs[i-1] == SEPARATOR
 				# remove '..' segments following a root delimiter
-				frags.delete_at(i)
+				segs.delete_at(i)
 				i -= 1
-			elsif frags[i] == '..' && frags[i-1] != '..' && i >= 1
+			elsif segs[i] == '..' && segs[i-1] != '..' && i >= 1
 				# remove every segment followed by a ".." marker
-				frags.delete_at(i)
-				frags.delete_at(i-1)
+				segs.delete_at(i)
+				segs.delete_at(i-1)
 				i -= 2
 			end
 			i += 1
 		end
 
-		return frags
+		return segs
 	end
 
 	# @private
-	def join_segments(frags)
+	def join_segments(segs)
 		# FIXME: windows, mac
 		# FIXME: avoid string substitutions and regexen
-		return frags.join(SEPARATOR).sub(%r{^//}, SEPARATOR).sub(/\A\Z/, '.')
+		return segs.join(SEPARATOR).sub(%r{^//}, SEPARATOR).sub(/\A\Z/, '.')
 	end
 
 	module PathResolution
