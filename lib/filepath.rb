@@ -3,4 +3,6 @@
 
 require 'filepath/filepath.rb'
 require 'filepath/filepathlist.rb'
+require 'filepath/core_ext/array.rb'
+require 'filepath/core_ext/string.rb'
 
