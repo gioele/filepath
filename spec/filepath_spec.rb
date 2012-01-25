@@ -590,6 +590,29 @@ describe FilePath do
 			end
 		end
 
+		describe "#find" do
+			it "finds all paths matching a glob string" do
+				list = @root.find('*1')
+
+				list.should have(6).items
+				list.each { |path| path.should =~ /1/ }
+			end
+
+			it "finds all paths matching a Regex" do
+				list = @root.find(/2/)
+
+				list.should have(5).items
+				list.each { |path| path.should =~ /2/ }
+			end
+
+			it "finds all paths for which the block returns true" do
+				list = @root.find { |path| path.directory? }
+
+				list.should have(9).items
+				list.each { |path| path.filename.should =~ /^d/ }
+			end
+		end
+
 		describe "#files" do
 			it "finds 1 file in the root directory" do
 				@root.files.should have(1).item

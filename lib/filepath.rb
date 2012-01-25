@@ -693,6 +693,18 @@ class FilePath
 		end
 		alias :glob :entries
 
+		def find(pattern = nil, &block)
+			if pattern.respond_to? :to_str
+				return entries(pattern, true)
+			end
+
+			if !block_given?
+				block = proc { |e| e =~ pattern }
+			end
+
+			return entries('*', true).select { |e| block.call(e) }
+		end
+
 		def files(recursive = false)
 			entries('*', recursive).select_entries(:file)
 		end
