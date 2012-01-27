@@ -655,9 +655,6 @@ class FilePath
 	def normalized_relative_segs(orig_segs)
 		segs = orig_segs.dup
 
-		# remove "current dir" markers
-		segs.delete('.')
-
 		i = 0
 		while (i < segs.length)
 			if segs[i] == '..' && segs[i-1] == SEPARATOR
@@ -669,6 +666,10 @@ class FilePath
 				segs.delete_at(i)
 				segs.delete_at(i-1)
 				i -= 2
+			elsif segs[i] == '.'
+				# remove "current dir" markers
+				segs.delete_at(i)
+				i -= 1
 			end
 			i += 1
 		end
