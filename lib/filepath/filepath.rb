@@ -185,11 +185,13 @@ class FilePath
 	# @return [FilePath] the filename
 
 	def filename
-		if self.root?
+		segs = self.normalized_segments
+
+		if self.root? || segs.empty?
 			return ''.as_path
 		end
 
-		filename = self.normalized_segments.last
+		filename = segs.last
 		return filename.as_path
 	end
 
@@ -771,9 +773,9 @@ class FilePath
 		end
 		alias :glob :entries
 
-		def find(pattern = nil, &block)
-			if pattern.respond_to? :to_str
-				return entries(pattern, true)
+		def find(pattern = nil, recursive = true, &block)
+			if !pattern.nil? && pattern.respond_to?(:to_str)
+				return entries(pattern, recursive)
 			end
 
 			if !block_given?

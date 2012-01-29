@@ -69,6 +69,7 @@ describe FilePath do
 			['/foo/bar', 'bar'],
 			['foo', 'foo'],
 			['/', ''],
+			['a/b/../../', ''],
 			['/foo/bar/.', 'bar'],
 			['a/b/../c', 'c'],
 		]
@@ -304,6 +305,7 @@ describe FilePath do
 			['/', '/'],
 			['/..', '/'],
 			['/../../../a', '/a'],
+			['a/b/../..', '.'],
 		]
 		test_data.each do |path, result|
 			it "turns `#{path}` into `#{result}`" do
