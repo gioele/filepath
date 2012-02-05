@@ -137,10 +137,16 @@ class FilePathList
 
 		define_array_method :each
 
-		define_array_method :map
-
 		define_array_method :size
 	end
 
+	module EntriesMethods
+		def map(&block)
+			mapped_entries = @entries.map(&block)
+			return FilePathList.new(mapped_entries)
+		end
+	end
+
 	include ArrayMethods
+	include EntriesMethods
 end
