@@ -43,24 +43,6 @@ class FilePathList
 		return FilePathList.new(remaining_entries)
 	end
 
-	def exclude(pattern = nil, &block)
-		if block_given?
-			select { |e| !block.call(e) }
-		else
-			select { |e| !(e =~ pattern) }
-		end
-	end
-
-	def select(pattern = nil, &block)
-		if !block_given?
-			block = proc { |e| e =~ pattern }
-		end
-
-		remaining_entries = @entries.select { |e| block.call(e) }
-
-		return FilePathList.new(remaining_entries)
-	end
-
 	def <<(extra_path)
 		return FilePathList.new(@entries + [extra_path.as_path])
 	end
@@ -144,6 +126,24 @@ class FilePathList
 		def map(&block)
 			mapped_entries = @entries.map(&block)
 			return FilePathList.new(mapped_entries)
+		end
+
+		def select(pattern = nil, &block)
+			if !block_given?
+				block = proc { |e| e =~ pattern }
+			end
+
+			remaining_entries = @entries.select { |e| block.call(e) }
+
+			return FilePathList.new(remaining_entries)
+		end
+
+		def exclude(pattern = nil, &block)
+			if block_given?
+				select { |e| !block.call(e) }
+			else
+				select { |e| !(e =~ pattern) }
+			end
 		end
 	end
 
