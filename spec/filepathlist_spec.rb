@@ -193,9 +193,9 @@ describe FilePathList do
 	end
 
 	describe FilePathList::EntriesMethods do
-		describe "#select" do
-			let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
+		let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
 
+		describe "#select" do
 			it "keeps paths matching a Regex" do
 				remaining = list.select(/bar$/)
 
@@ -213,8 +213,6 @@ describe FilePathList do
 		end
 
 		describe "#exclude" do
-			let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
-
 			it "excludes paths matching a Regex" do
 				remaining = list.exclude(/bar$/)
 
@@ -233,8 +231,6 @@ describe FilePathList do
 		end
 
 		describe "#map" do
-			let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
-
 			it "applies a block to each path" do
 				mapped = list.map { |path| path.remove_extension }
 
