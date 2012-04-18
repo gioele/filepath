@@ -192,6 +192,31 @@ describe FilePathList do
 		end
 	end
 
+	describe FilePathList::ArrayMethods do
+		let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
+
+		describe "#all?" do
+			it "checks whether a block applies to a list" do
+				ok = list.all? { |path| path.extension? }
+				ok.should be_true
+			end
+		end
+
+		describe "#any?" do
+			it "check whether a block does not apply to any path" do
+				ok = list.any? { |path| path.basename == "a.foo" }
+				ok.should be_true
+			end
+		end
+
+		describe "#none?" do
+			it "check whether a block does not apply to any path" do
+				ok = list.none? { |path| path.absolute? }
+				ok.should be_true
+			end
+		end
+	end
+
 	describe FilePathList::EntriesMethods do
 		let(:list) { FilePathList.new(%w{a.foo b.bar c.foo d.foo b.bar}) }
 

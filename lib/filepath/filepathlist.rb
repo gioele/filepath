@@ -119,6 +119,12 @@ class FilePathList
 
 		define_array_method :each
 
+		define_array_method :all?
+
+		define_array_method :any?
+
+		define_array_method :none?
+
 		define_array_method :size
 	end
 
