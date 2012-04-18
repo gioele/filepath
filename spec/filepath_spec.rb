@@ -452,6 +452,23 @@ describe FilePath do
 		end
 	end
 
+	describe "#<=>" do
+		test_data = [
+			['a/', 'b'],
+			['/a', 'a'],
+			['../b', 'a'],
+		]
+		test_data.each do |path1, path2|
+			it "says that `#{path1}` precedes `#{path2}`" do
+				p1 = path1.as_path
+				p2 = path2.as_path
+
+				order = p1 <=> p2
+				order.should == -1
+			end
+		end
+	end
+
 	describe "#hash" do
 		it "has the same value for similar paths" do
 			p1 = '/foo/bar'.as_path

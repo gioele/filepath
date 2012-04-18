@@ -629,6 +629,11 @@ class FilePath
 	end
 
 	# @private
+	def <=>(other)
+		return self.normalized_segments <=> other.normalized_segments
+	end
+
+	# @private
 	def hash
 		return @segments.hash
 	end
