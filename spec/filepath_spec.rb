@@ -539,7 +539,7 @@ describe FilePath do
 				(@root / 'd1' / 'l11').should_not be_file
 			end
 
-			it "says that the root directory is not a file" do
+			it "says that the fixture root directory is not a file" do
 				@root.should_not be_file
 			end
 		end
@@ -553,7 +553,7 @@ describe FilePath do
 				(@root / 'd1' / 'l11').should be_link
 			end
 
-			it "says that the root directory is not a link" do
+			it "says that the fixture root directory is not a link" do
 				@root.should_not be_link
 			end
 		end
@@ -567,7 +567,7 @@ describe FilePath do
 				(@root / 'd1' / 'l11').should_not be_directory
 			end
 
-			it "says that the root directory is file" do
+			it "says that the fixture root directory is a directory" do
 				@root.should be_directory
 			end
 		end
