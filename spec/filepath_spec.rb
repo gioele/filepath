@@ -27,15 +27,15 @@ describe FilePath do
 		]
 		test_data.each do |base, extra, result|
 			it "concatenates `#{base}` and `#{extra}` (as String) into `#{result}`" do
-				p = FilePath.new(base) / extra
-				p.should == result
+				ph = FilePath.new(base) / extra
+				ph.should == result
 			end
 		end
 
 		test_data.each do |base, extra, result|
 			it "concatenates `#{base}` and `#{extra}` (as FilePath) into `#{result}`" do
-				p = FilePath.new(base) / FilePath.new(extra)
-				p.should == result
+				ph = FilePath.new(base) / FilePath.new(extra)
+				ph.should == result
 			end
 		end
 	end
@@ -75,8 +75,8 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "says that `#{result}` is the filename of `#{path}`" do
-				p = FilePath.new(path)
-				p.filename.should == result
+				ph = FilePath.new(path)
+				ph.filename.should == result
 			end
 		end
 	end
@@ -91,8 +91,8 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "says that `#{result}` is the parent dir of `#{path}`" do
-				p = FilePath.new(path)
-				p.parent_dir.should == result
+				ph = FilePath.new(path)
+				ph.parent_dir.should == result
 			end
 		end
 	end
@@ -109,8 +109,8 @@ describe FilePath do
 		]
 		test_data.each do |path, base, result|
 			it "says that `#{path}` relative to `#{base}` is `#{result}`" do
-				p = FilePath.new(path)
-				p.relative_to(base).should == result
+				ph = FilePath.new(path)
+				ph.relative_to(base).should == result
 			end
 		end
 
@@ -122,8 +122,8 @@ describe FilePath do
 		]
 		test_data2.each do |path, base|
 			it "raise an exception because `#{path}` and `#{base}` have different prefixes" do
-				p = FilePath.new(path)
-				expect { p.relative_to(base) }.to raise_error(ArgumentError)
+				ph = FilePath.new(path)
+				expect { ph.relative_to(base) }.to raise_error(ArgumentError)
 			end
 		end
 	end
@@ -138,8 +138,8 @@ describe FilePath do
 		]
 		test_data.each do |path, base, result|
 			it "says that `#{path}` relative to the file `#{base}` is `#{result}`" do
-				p = FilePath.new(path)
-				p.relative_to_file(base).should == result
+				ph = FilePath.new(path)
+				ph.relative_to_file(base).should == result
 			end
 		end
 	end
@@ -152,8 +152,8 @@ describe FilePath do
 		]
 		test_data.each do |base, new, result|
 			it "changes `#{base}` + `#{new}` into `#{result}`" do
-				p = FilePath.new(base)
-				p.with_filename(new).should == result
+				ph = FilePath.new(base)
+				ph.with_filename(new).should == result
 			end
 		end
 	end
@@ -349,8 +349,8 @@ describe FilePath do
 	describe "#ascend" do
 		it "goes through all the segments of an absolute path" do
 			steps = []
-			FilePath.new("/a/b/c").ascend do |p|
-				steps << p
+			FilePath.new("/a/b/c").ascend do |seg|
+				steps << seg
 			end
 
 			steps.should have(4).items
@@ -362,8 +362,8 @@ describe FilePath do
 
 		it "goes through all the segments of a relative path" do
 			steps = []
-			FilePath.new("a/b/c").ascend do |p|
-				steps << p
+			FilePath.new("a/b/c").ascend do |seg|
+				steps << seg
 			end
 
 			steps.should have(3).items
@@ -381,8 +381,8 @@ describe FilePath do
 	describe "#descend" do
 		it "goes through all the segments of an absolute path" do
 			steps = []
-			FilePath.new("/a/b/c").descend do |p|
-				steps << p
+			FilePath.new("/a/b/c").descend do |seg|
+				steps << seg
 			end
 
 			steps.should have(4).items
@@ -394,8 +394,8 @@ describe FilePath do
 
 		it "goes through all the segments of a relative path" do
 			steps = []
-			FilePath.new("a/b/c").descend do |p|
-				steps << p
+			FilePath.new("a/b/c").descend do |seg|
+				steps << seg
 			end
 
 			steps.should have(3).items
@@ -448,8 +448,8 @@ describe FilePath do
 		]
 		test_data.each do |ver1, ver2|
 			it "says that `#{ver1}` is equivalent to `#{ver2}`" do
-				p = FilePath.new(ver1)
-				p.should == ver2
+				ph = FilePath.new(ver1)
+				ph.should == ver2
 			end
 		end
 	end
