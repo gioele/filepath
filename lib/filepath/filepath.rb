@@ -751,6 +751,10 @@ class FilePath
 
 		define_filetest_method :directory?
 
+		define_filetest_method :pipe?
+
+		define_filetest_method :socket?
+
 		define_filetest_method :exists?
 		alias :exist? :exists?
 

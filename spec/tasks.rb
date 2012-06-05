@@ -16,6 +16,9 @@ FIXTURES_FAKE_ENTRIES = [
 	'd3',
 	'f1',
 	'dx',
+	'p1',
+	'p2',
+	's1',
 ].map { |entry| File.join(FIXTURES_DIR, *Array(entry)) }
 
 CLEAN.concat FIXTURES_FAKE_ENTRIES
@@ -32,6 +35,15 @@ namespace :spec do
 
 		rule %r{/l[0-9]+$} do |t|
 			ln_s '/dev/null', t.name
+		end
+
+		rule %r{/p[0-9]+$} do |t|
+			system "mkfifo #{t.name}"
+		end
+
+		rule %r{/s[0-9]+$} do |t|
+			require 'socket'
+			UNIXServer.new(t.name)
 		end
 
 		desc "Generate fake dirs and files"

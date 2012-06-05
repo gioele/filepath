@@ -572,6 +572,34 @@ describe FilePath do
 			end
 		end
 
+		describe "#pipe?" do
+			it "says that `p1` is a pipe" do
+				(@root / 'p1').should be_pipe
+			end
+
+			it "says that `f1` is not a pipe" do
+				(@root / 'f1').should_not be_pipe
+			end
+
+			it "says that the fixture root directory is not a pipe" do
+				@root.should_not be_pipe
+			end
+		end
+
+		describe "#socket?" do
+			it "says that `s1` is a socket" do
+				(@root / 's1').should be_socket
+			end
+
+			it "says that `f1` is not a socket" do
+				(@root / 'f1').should_not be_socket
+			end
+
+			it "says that the fixture root directory is not a socket" do
+				@root.should_not be_socket
+			end
+		end
+
 		describe "#hidden?" do
 			hidden_paths = [
 				'.foorc',
@@ -673,14 +701,14 @@ describe FilePath do
 			it "finds all paths matching a glob string" do
 				list = @root.find('*1')
 
-				list.should have(6).items
+				list.should have(8).items
 				list.each { |path| path.should =~ /1/ }
 			end
 
 			it "finds all paths matching a Regex" do
 				list = @root.find(/2/)
 
-				list.should have(5).items
+				list.should have(6).items
 				list.each { |path| path.should =~ /2/ }
 			end
 
