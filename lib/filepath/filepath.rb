@@ -212,7 +212,7 @@ class FilePath
 	# @example
 	#
 	#     post = "posts/2012-02-16-hello-world/index.md".as_path
-	#     style = post.replace_filename("style.css")
+	#     style = post.with_filename("style.css")
 	#     style.to_s #=> "posts/2012-02-16-hello-world/style.css"
 	#
 	# @param [FilePath, String] new_path the path to be put in place of
@@ -222,14 +222,16 @@ class FilePath
 	#                    current filename
 	#
 	# @see #filename
-	# @see #replace_extension
+	# @see #with_extension
 
-	def replace_filename(new_path)
+	def with_filename(new_path)
 		dir = self.parent_dir
 		return dir / new_path
 	end
 
-	alias :replace_basename :replace_filename
+	alias :with_basename :with_filename
+	alias :replace_filename :with_filename
+	alias :replace_basename :with_filename
 
 
 	# The extension of the file.
@@ -291,44 +293,44 @@ class FilePath
 	#
 	# @see #extension
 	# @see #extension?
-	# @see #remove_extension
-	# @see #replace_filename
+	# @see #without_extension
+	# @see #with_filename
 	#
-	# @overload replace_extension(new_ext)
+	# @overload with_extension(new_ext)
 	#     Replaces the file extension with the supplied one. If the file
 	#     has no extension it is added to the file name together with a dot.
 	#
 	#     @example Extension replacement
 	#
 	#         src_path = "pages/about.markdown".as_path
-	#         html_path = src_path.replace_extension("html")
+	#         html_path = src_path.with_extension("html")
 	#         html_path.to_s #=> "pages/about.html"
 	#
 	#     @example Extension addition
 	#
 	#         base = "style/main-style".as_path
-	#         sass_style = base.replace_extension("sass")
+	#         sass_style = base.with_extension("sass")
 	#         sass_style.to_s #=> "style/main-style.sass"
 	#
 	#     @param [String] new_ext the new extension
 	#
 	#     @return [FilePath] a new path with the replaced extension
 	#
-	# @overload replace_extension
+	# @overload with_extension
 	#     Removes the file extension if present.
 	#
-	#     The {#remove_extension} method provides the same functionality
+	#     The {#without_extension} method provides the same functionality
 	#     but has a more meaningful name.
 	#
 	#     @example
 	#
 	#         post_file = "post/welcome.html"
-	#         post_url = post_file.replace_extension(nil)
+	#         post_url = post_file.with_extension(nil)
 	#         post_url.to_s #=> "post/welcome"
 	#
 	#     @return [FilePath] a new path without the extension
 
-	def replace_extension(new_ext) # FIXME: accept block
+	def with_extension(new_ext) # FIXME: accept block
 		orig_filename = filename.to_s
 
 		if !self.extension?
@@ -353,8 +355,9 @@ class FilePath
 		return FilePath.new(segs)
 	end
 
-	alias :replace_ext :replace_extension
-	alias :sub_ext :replace_extension
+	alias :replace_extension :with_extension
+	alias :replace_ext :with_extension
+	alias :sub_ext :with_extension
 
 
 	# Removes the file extension if present.
@@ -362,18 +365,19 @@ class FilePath
 	# @example
 	#
 	#     post_file = "post/welcome.html"
-	#     post_url = post_file.remove_extension
+	#     post_url = post_file.without_extension
 	#     post_url.to_s #=> "post/welcome"
 	#
 	# @return [FilePath] a new path without the extension
 	#
-	# @see #replace_extension
+	# @see #with_extension
 
-	def remove_extension
-		return replace_ext(nil)
+	def without_extension
+		return with_extension(nil)
 	end
 
-	alias :remove_ext :remove_extension
+	alias :remove_ext :without_extension
+	alias :remove_extension :without_extension
 
 
 	# Matches a pattern against this path.

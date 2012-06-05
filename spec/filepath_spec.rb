@@ -144,7 +144,7 @@ describe FilePath do
 		end
 	end
 
-	describe "#replace_filename" do
+	describe "#with_filename" do
 		test_data = [
 			['foo/bar', 'quux', 'foo/quux'],
 			['foo/baz/..', 'quux', 'quux'],
@@ -153,7 +153,7 @@ describe FilePath do
 		test_data.each do |base, new, result|
 			it "changes `#{base}` + `#{new}` into `#{result}`" do
 				p = FilePath.new(base)
-				p.replace_filename(new).should == result
+				p.with_filename(new).should == result
 			end
 		end
 	end
@@ -215,7 +215,7 @@ describe FilePath do
 		end
 	end
 
-	describe "#replace_extension(String)" do
+	describe "#with_extension(String)" do
 		test_data = [
 			['foo.bar', 'foo.baz'],
 			['foo.', 'foo.baz'],
@@ -225,13 +225,13 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "replaces `#{path}` with `baz` into `#{result}`" do
-				new = FilePath.new(path).replace_extension('baz')
+				new = FilePath.new(path).with_extension('baz')
 				new.basename.to_s.should == result
 			end
 		end
 	end
 
-	describe "#remove_extension" do
+	describe "#without_extension" do
 		test_data = [
 			['foo.bar', 'foo'],
 			['foo.', 'foo'],
@@ -241,7 +241,7 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "turns `#{path}` into `#{result}`" do
-				new = FilePath.new(path).remove_extension
+				new = FilePath.new(path).without_extension
 				new.basename.to_s.should == result
 			end
 		end
