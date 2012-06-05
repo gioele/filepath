@@ -466,6 +466,36 @@ class FilePath
 
 	alias :normalised :normalized
 
+	# Iterates over all the path segments, from the leftmost to the
+	# rightmost.
+	#
+	# @example
+	#
+	#     web_dir = "/srv/example.org/web/html".as_path
+	#     web_dir.each_segment do |seg|
+	#         puts seg
+	#     end
+	#
+	#     # produces
+	#     #
+	#     # /
+	#     # srv
+	#     # example.org
+	#     # web
+	#     # html
+	#
+	# @yield [path] TODO
+	#
+	# @return [FilePath] the path itself.
+	#
+	# @see #ascend
+	# @see #descend
+
+	def each_segment(&block)
+		@segments.each(&block)
+		return self
+	end
+
 
 	# Iterates over all the path directories, from the current path to
 	# the root.
@@ -494,6 +524,7 @@ class FilePath
 	#
 	# @return [FilePath] the path itself.
 	#
+	# @see #each_segment
 	# @see #descend
 
 	def ascend(max_depth = nil, &block)
@@ -527,6 +558,7 @@ class FilePath
 	#
 	# @return [FilePath] the path itself.
 	#
+	# @see #each_segment
 	# @see #ascend
 
 	def descend(max_depth = nil, &block)

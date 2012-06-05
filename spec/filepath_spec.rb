@@ -314,6 +314,38 @@ describe FilePath do
 		end
 	end
 
+	describe "#each_segment" do
+		it "goes through all the segments of an absolute path" do
+			steps = []
+			FilePath.new("/a/b/c").each_segment do |seg|
+				steps << seg
+			end
+
+			steps.should have(4).items
+			steps[0].should eq("/")
+			steps[1].should eq("a")
+			steps[2].should eq("b")
+			steps[3].should eq("c")
+		end
+
+		it "goes through all the segments of a relative path" do
+			steps = []
+			FilePath.new("a/b/c").each_segment do |seg|
+				steps << seg
+			end
+
+			steps.should have(3).items
+			steps[0].should eq("a")
+			steps[1].should eq("b")
+			steps[2].should eq("c")
+		end
+
+		it "returns the path itself" do
+			path = FilePath.new("/a/b/c/")
+			path.each_segment { }.should be(path)
+		end
+	end
+
 	describe "#ascend" do
 		it "goes through all the segments of an absolute path" do
 			steps = []
