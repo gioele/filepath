@@ -525,29 +525,11 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::PathResolution do
-		describe "#absolute_path" do
-			test_data = [
-				['d1/l11', File.expand_path('d1/l11', FIXTURES_DIR), FIXTURES_DIR],
-				['/foo/bar', '/foo/bar', '.'],
-			]
-			test_data.each do |path, abs_path, cwd|
-				it "resolves <#{path}> to <#{abs_path}> (in #{cwd})" do
-					Dir.chdir(cwd) do # FIXME
-						FilePath.new(path).absolute_path.should == abs_path
-					end
-				end
-			end
-		end
+	describe FilePath::MetadataInfo
 
-		describe "#real_path" do
-			it "resolves <d1/l11> to </dev/null>" do
-				(@root / 'd1' / 'l11').real_path.should == '/dev/null'
-			end
-		end
-	end
+	describe FilePath::MetadataChanges
 
-	describe FilePath::FileInfo do
+	describe FilePath::MetadataTests do
 		describe "#file?" do
 			it "says that `f1` is a file" do
 				(@root / 'f1').should be_file
@@ -614,7 +596,29 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::FileManipulationMethods do
+	describe FilePath::FilesystemInfo do
+		describe "#absolute_path" do
+			test_data = [
+				['d1/l11', File.expand_path('d1/l11', FIXTURES_DIR), FIXTURES_DIR],
+				['/foo/bar', '/foo/bar', '.'],
+			]
+			test_data.each do |path, abs_path, cwd|
+				it "resolves <#{path}> to <#{abs_path}> (in #{cwd})" do
+					Dir.chdir(cwd) do # FIXME
+						FilePath.new(path).absolute_path.should == abs_path
+					end
+				end
+			end
+		end
+
+		describe "#real_path" do
+			it "resolves <d1/l11> to </dev/null>" do
+				(@root / 'd1' / 'l11').real_path.should == '/dev/null'
+			end
+		end
+	end
+
+	describe FilePath::FilesystemChanges do
 		describe "#touch" do
 			let(:ph) { @root / 'd1' / 'test-touch' }
 
@@ -652,7 +656,13 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::DirectoryMethods do
+	describe FilePath::FilesystemTests
+
+	describe FilePath::ContentInfo
+	describe FilePath::ContentChanges
+	describe FilePath::ContentTests
+
+	describe FilePath::SearchMethods do
 		describe "#entries" do
 			it "raises when path is not a directory" do
 				expect { (@root / 'f1').entries(:files) }.to raise_error(Errno::ENOTDIR)
@@ -728,6 +738,8 @@ describe FilePath do
 			end
 		end
 	end
+
+	describe FilePath::EnvironmentInfo
 end
 
 describe String do

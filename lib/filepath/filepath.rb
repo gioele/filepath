@@ -727,29 +727,15 @@ class FilePath
 		return segs.join(SEPARATOR).sub(%r{^//}, SEPARATOR).sub(/\A\Z/, '.')
 	end
 
-	module PathResolution
-		def absolute_path(base_dir = Dir.pwd) # FIXME: rename to `#absolute`?
-			if self.absolute?
-				return self
-			end
-
-			return base_dir.as_path / self
-		end
-
-		def real_path(base_dir = Dir.pwd)
-			path = absolute_path(base_dir)
-
-			return path.resolve_link
-		end
-
-		alias :realpath :real_path
-
-		def resolve_link
-			return File.readlink(self).as_path
-		end
+	module MetadataInfo
+		# TODO
 	end
 
-	module FileInfo
+	module MetadataChanges
+		# TODO
+	end
+
+	module MetadataTests
 		# @private
 		def self.define_filetest_method(filepath_method, filetest_method = nil)
 			filetest_method ||= filepath_method
@@ -786,18 +772,54 @@ class FilePath
 		end
 	end
 
-	module FileManipulationMethods
-		def open(*args, &block)
-			File.open(self, *args, &block)
+	module FilesystemInfo
+		def absolute_path(base_dir = Dir.pwd) # FIXME: rename to `#absolute`?
+			if self.absolute?
+				return self
+			end
+
+			return base_dir.as_path / self
 		end
 
+		def real_path(base_dir = Dir.pwd)
+			path = absolute_path(base_dir)
+
+			return path.resolve_link
+		end
+
+		alias :realpath :real_path
+
+		def resolve_link
+			return File.readlink(self).as_path
+		end
+	end
+
+	module FilesystemChanges
 		def touch
 			self.open('a') do ; end
 			File.utime(File.atime(self), Time.now, self)
 		end
 	end
 
-	module DirectoryMethods
+	module FilesystemTests
+		# TODO
+	end
+
+	module ContentInfo
+		def open(*args, &block)
+			File.open(self, *args, &block)
+		end
+	end
+
+	module ContentChanges
+		# TODO
+	end
+
+	module ContentTests
+		# TODO
+	end
+
+	module SearchMethods
 		def entries(pattern = '*', recursive = false)
 			if !self.directory?
 				raise Errno::ENOTDIR.new(self)
@@ -839,8 +861,22 @@ class FilePath
 		end
 	end
 
-	include PathResolution
-	include FileInfo
-	include FileManipulationMethods
-	include DirectoryMethods
+	module EnvironmentInfo
+	end
+
+	include MetadataInfo
+	include MetadataChanges
+	include MetadataTests
+
+	include FilesystemInfo
+	include FilesystemChanges
+	include FilesystemTests
+
+	include ContentInfo
+	include ContentChanges
+	include ContentTests
+
+	include SearchMethods
+
+	include EnvironmentInfo
 end
