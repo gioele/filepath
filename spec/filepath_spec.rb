@@ -525,7 +525,31 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::MetadataInfo
+	describe FilePath::MetadataInfo do
+		describe "#stat" do
+			it "returns a stat for the file" do
+				(@root / 'd1').stat.should be_directory
+				(@root / 'f1').stat.size.should be_zero
+			end
+
+			it "follows links" do
+				(@root / 'd1' / 'l11').stat.should == '/dev/null'.as_path.stat
+			end
+
+			it "raises Errno::ENOENT for non-existing files" do
+				expect { (@root / 'foobar').stat }.to raise_error(Errno::ENOENT)
+			end
+		end
+
+		describe "#lstat" do
+			it "does not follow links" do
+				link_lstat = (@root / 'd1' / 'l11').lstat
+
+				link_lstat.should_not eq('/dev/null'.as_path.stat)
+				link_lstat.should be_symlink
+			end
+		end
+	end
 
 	describe FilePath::MetadataChanges
 

@@ -728,7 +728,17 @@ class FilePath
 	end
 
 	module MetadataInfo
-		# TODO
+		# @private
+		def self.define_file_method(filepath_method, filetest_method = nil)
+			filetest_method ||= filepath_method
+			define_method(filepath_method) do
+				return File.send(filetest_method, self)
+			end
+		end
+
+		define_file_method :stat
+
+		define_file_method :lstat
 	end
 
 	module MetadataChanges
