@@ -708,7 +708,25 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::FilesystemTests
+	describe FilePath::FilesystemTests do
+		describe "mountpoint?" do
+			it "says that </proc> is a mount point" do
+				"/proc".as_path.should be_mountpoint
+			end
+
+			it "says that this RSpec file is not a mount point" do
+				__FILE__.as_path.should_not be_mountpoint
+			end
+
+			it "says that an non-existing file is not a mount point" do
+				"/foo/bar".as_path.should_not be_mountpoint
+			end
+
+			it "says that </> is a mount point" do
+				"/".as_path.should be_mountpoint
+			end
+		end
+	end
 
 	describe FilePath::ContentInfo
 	describe FilePath::ContentChanges

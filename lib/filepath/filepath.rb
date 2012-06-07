@@ -816,7 +816,17 @@ class FilePath
 	end
 
 	module FilesystemTests
-		# TODO
+		def mountpoint?
+			if !directory? || !exists?
+				return false
+			end
+
+			if root?
+				return true
+			end
+
+			return self.lstat.dev != parent_dir.lstat.dev
+		end
 	end
 
 	module ContentInfo
