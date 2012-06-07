@@ -850,6 +850,32 @@ describe FilePath do
 				ph.size.should == 3
 			end
 		end
+
+		describe "#truncate" do
+			let(:ph) { @root / 'd1' / 'test-read' }
+			let(:content) { "a"*20 + "b"*10 + "c"*5 }
+
+			before(:each) do
+				ph.should_not exist
+				ph.open('w') { |f| f << content }
+			end
+
+			after(:each) do
+				File.delete(ph) if File.exists?(ph)
+			end
+
+			it "truncates a file to 0 bytes" do
+				ph.size.should_not be_zero
+				ph.truncate
+				ph.size.should be_zero
+			end
+
+			it "truncates a file to an arbitrary size" do
+				ph.size.should_not be_zero
+				ph.truncate(2)
+				ph.size.should == 2
+			end
+		end
 	end
 
 	describe FilePath::ContentTests

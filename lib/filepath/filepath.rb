@@ -894,6 +894,16 @@ class FilePath
 		end
 
 		define_io_method :open
+
+		define_io_method :file_truncate, :truncate
+
+		def truncate(*args)
+			if args.empty?
+				args << 0
+			end
+
+			file_truncate(*args)
+		end
 	end
 
 	module ContentTests
