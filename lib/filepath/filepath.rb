@@ -778,6 +778,8 @@ class FilePath
 
 		define_filetest_method :setuid?
 
+		define_filetest_method :sticky?
+
 		define_filetest_method :empty?, :zero?
 		alias :zero? :empty?
 
