@@ -757,7 +757,41 @@ describe FilePath do
 	end
 
 	describe FilePath::ContentInfo
-	describe FilePath::ContentChanges
+
+	describe FilePath::ContentChanges do
+		describe "#open" do
+			let(:ph) { @root / 'd1' / 'test-open' }
+
+			before(:each) do
+				ph.should_not exist
+				ph.touch
+			end
+
+			after(:each) do
+				File.delete(ph) if File.exists?(ph)
+			end
+
+			it "opens files" do
+				file = ph.open
+				file.should be_a(File)
+			end
+
+			it "opens files in read-only mode" do
+				ph.open do |file|
+					expect { file << "abc" }.to raise_error(IOError)
+				end
+			end
+
+			it "opens files in read-write mode" do
+				ph.open('w') do |file|
+					file << "abc"
+				end
+
+				ph.stat.size.should == 3
+			end
+		end
+	end
+
 	describe FilePath::ContentTests
 
 	describe FilePath::SearchMethods do

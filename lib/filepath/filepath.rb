@@ -865,13 +865,19 @@ class FilePath
 	end
 
 	module ContentInfo
-		def open(*args, &block)
-			File.open(self, *args, &block)
-		end
+		# TODO
 	end
 
 	module ContentChanges
-		# TODO
+		# @private
+		def self.define_io_method(filepath_method, filetest_method = nil)
+			filetest_method ||= filepath_method
+			define_method(filepath_method) do |*args, &block|
+				return File.send(filetest_method, self, *args, &block)
+			end
+		end
+
+		define_io_method :open
 	end
 
 	module ContentTests
