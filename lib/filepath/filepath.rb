@@ -764,8 +764,14 @@ class FilePath
 		# chmod(mode)
 		define_file_method :chmod
 
+		# lchmod(mode)
+		define_file_method :lchmod
+
 		# chown(owner_id, group_id)
 		define_file_method :chown
+
+		# lchown(owner_id, group_id)
+		define_file_method :lchown
 	end
 
 	module MetadataTests
