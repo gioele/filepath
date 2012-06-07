@@ -757,6 +757,39 @@ describe FilePath do
 	end
 
 	describe FilePath::ContentInfo do
+		describe "#read" do
+			let(:ph) { @root / 'd1' / 'test-read' }
+			let(:content) { "a"*20 + "b"*10 + "c"*5 }
+
+			before(:each) do
+				ph.should_not exist
+				ph.open('w') { |f| f << content }
+			end
+
+			after(:each) do
+				File.delete(ph) if File.exists?(ph)
+			end
+
+			it "reads the complete content of a file" do
+				c = ph.read
+				c.should == content
+			end
+
+			it "reads the content in chunks of arbitrary sizes" do
+				sum = ""
+				len = 8
+
+				num_chunks = (content.length.to_f / len).ceil
+				num_chunks.times do |i|
+					c = ph.read(len, len*i)
+					sum += c
+					c.should == content[len*i, len]
+				end
+
+				sum.should == content
+			end
+		end
+
 		describe "#size" do
 			let(:ph) { @root / 'd1' / 'test-read' }
 

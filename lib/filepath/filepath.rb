@@ -873,6 +873,14 @@ class FilePath
 			end
 		end
 
+		define_io_method :read
+
+		if IO.respond_to? :binread
+			define_io_method :binread
+		else
+			alias :binread :read
+		end
+
 		define_io_method :size
 	end
 
