@@ -765,6 +765,10 @@ class FilePath
 
 		define_filetest_method :socket?
 
+		define_filetest_method :blockdev?
+
+		define_filetest_method :chardev?
+
 		define_filetest_method :exists?
 		alias :exist? :exists?
 
