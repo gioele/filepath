@@ -551,7 +551,35 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::MetadataChanges
+	describe FilePath::MetadataChanges do
+		describe "#chtime" do
+			it "change mtime" do
+				ph = @root / 'f1'
+				orig_mtime = ph.mtime
+
+				ph.chtime(Time.now, 0)
+				ph.mtime.to_i.should eq(0)
+
+				ph.chtime(Time.now, orig_mtime)
+				ph.mtime.should eq(orig_mtime)
+			end
+		end
+
+		describe "#chmod" do
+			it "changes file permissions" do
+				ph = @root / 'f1'
+				orig_mode = ph.stat.mode
+
+				ph.should be_readable
+
+				ph.chmod(000)
+				ph.should_not be_readable
+
+				ph.chmod(orig_mode)
+				ph.should be_readable
+			end
+		end
+	end
 
 	describe FilePath::MetadataTests do
 		describe "#file?" do

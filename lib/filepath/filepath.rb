@@ -739,10 +739,33 @@ class FilePath
 		define_file_method :stat
 
 		define_file_method :lstat
+
+		define_file_method :atime
+
+		define_file_method :ctime
+
+		define_file_method :mtime
 	end
 
 	module MetadataChanges
-		# TODO
+		# @private
+		def self.define_file_method(filepath_method, filetest_method = nil)
+			filetest_method ||= filepath_method
+			define_method(filepath_method) do |*args|
+				all_args = args + [self]
+				return File.send(filetest_method, *all_args)
+			end
+		end
+
+		# utime(atime, mtime)
+		define_file_method :utime
+		alias :chtime :utime
+
+		# chmod(mode)
+		define_file_method :chmod
+
+		# chown(owner_id, group_id)
+		define_file_method :chown
 	end
 
 	module MetadataTests
