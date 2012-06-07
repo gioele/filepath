@@ -756,7 +756,34 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::ContentInfo
+	describe FilePath::ContentInfo do
+		describe "#size" do
+			let(:ph) { @root / 'd1' / 'test-read' }
+
+			before(:each) do
+				ph.should_not exist
+				ph.touch
+			end
+
+			after(:each) do
+				File.delete(ph) if File.exists?(ph)
+			end
+
+			it "says that an empty file contains 0 bytes" do
+				ph.size.should be_zero
+			end
+
+			it "reports the size of a non-empty file" do
+				ph.size.should be_zero
+
+				ph.open("a") { |f| f << "abc" }
+				ph.size.should eq(3)
+
+				ph.open("a") { |f| f << "defg" }
+				ph.size.should eq(3+4)
+			end
+		end
+	end
 
 	describe FilePath::ContentChanges do
 		describe "#open" do
@@ -787,7 +814,7 @@ describe FilePath do
 					file << "abc"
 				end
 
-				ph.stat.size.should == 3
+				ph.size.should == 3
 			end
 		end
 	end

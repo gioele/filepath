@@ -865,7 +865,15 @@ class FilePath
 	end
 
 	module ContentInfo
-		# TODO
+		# @private
+		def self.define_io_method(filepath_method, filetest_method = nil)
+			filetest_method ||= filepath_method
+			define_method(filepath_method) do |*args, &block|
+				return File.send(filetest_method, self, *args, &block)
+			end
+		end
+
+		define_io_method :size
 	end
 
 	module ContentChanges
