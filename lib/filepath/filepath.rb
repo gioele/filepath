@@ -727,14 +727,35 @@ class FilePath
 		return segs.join(SEPARATOR).sub(%r{^//}, SEPARATOR).sub(/\A\Z/, '.')
 	end
 
-	module MetadataInfo
+	module MethodDelegation
 		# @private
-		def self.define_file_method(filepath_method, filetest_method = nil)
-			filetest_method ||= filepath_method
-			define_method(filepath_method) do
-				return File.send(filetest_method, self)
+		def define_io_method(filepath_method, io_method = nil)
+			io_method ||= filepath_method
+			define_method(filepath_method) do |*args, &block|
+				return File.send(io_method, self, *args, &block)
 			end
 		end
+
+		# @private
+		def define_file_method(filepath_method, file_method = nil)
+			file_method ||= filepath_method
+			define_method(filepath_method) do |*args|
+				all_args = args + [self]
+				return File.send(file_method, *all_args)
+			end
+		end
+
+		# @private
+		def define_filetest_method(filepath_method, filetest_method = nil)
+			filetest_method ||= filepath_method
+			define_method(filepath_method) do
+				return FileTest.send(filetest_method, self)
+			end
+		end
+	end
+
+	module MetadataInfo
+		extend MethodDelegation
 
 		define_file_method :stat
 
@@ -748,14 +769,7 @@ class FilePath
 	end
 
 	module MetadataChanges
-		# @private
-		def self.define_file_method(filepath_method, filetest_method = nil)
-			filetest_method ||= filepath_method
-			define_method(filepath_method) do |*args|
-				all_args = args + [self]
-				return File.send(filetest_method, *all_args)
-			end
-		end
+		extend MethodDelegation
 
 		# utime(atime, mtime)
 		define_file_method :utime
@@ -775,13 +789,7 @@ class FilePath
 	end
 
 	module MetadataTests
-		# @private
-		def self.define_filetest_method(filepath_method, filetest_method = nil)
-			filetest_method ||= filepath_method
-			define_method(filepath_method) do
-				return FileTest.send(filetest_method, self)
-			end
-		end
+		extend MethodDelegation
 
 		define_filetest_method :file?
 
@@ -862,13 +870,7 @@ class FilePath
 	end
 
 	module ContentInfo
-		# @private
-		def self.define_io_method(filepath_method, filetest_method = nil)
-			filetest_method ||= filepath_method
-			define_method(filepath_method) do |*args, &block|
-				return File.send(filetest_method, self, *args, &block)
-			end
-		end
+		extend MethodDelegation
 
 		define_io_method :read
 
@@ -882,13 +884,7 @@ class FilePath
 	end
 
 	module ContentChanges
-		# @private
-		def self.define_io_method(filepath_method, filetest_method = nil)
-			filetest_method ||= filepath_method
-			define_method(filepath_method) do |*args, &block|
-				return File.send(filetest_method, self, *args, &block)
-			end
-		end
+		extend MethodDelegation
 
 		define_io_method :open
 
@@ -904,13 +900,7 @@ class FilePath
 	end
 
 	module ContentTests
-		# @private
-		def self.define_filetest_method(filepath_method, filetest_method = nil)
-			filetest_method ||= filepath_method
-			define_method(filepath_method) do
-				return FileTest.send(filetest_method, self)
-			end
-		end
+		extend MethodDelegation
 
 		define_filetest_method :empty?, :zero?
 		alias :zero? :empty?
