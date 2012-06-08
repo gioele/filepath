@@ -813,9 +813,6 @@ class FilePath
 
 		define_filetest_method :sticky?
 
-		define_filetest_method :empty?, :zero?
-		alias :zero? :empty?
-
 		def hidden?
 			@segments.last.start_with?('.') # FIXME: windows, mac
 		end
@@ -907,7 +904,16 @@ class FilePath
 	end
 
 	module ContentTests
-		# TODO
+		# @private
+		def self.define_filetest_method(filepath_method, filetest_method = nil)
+			filetest_method ||= filepath_method
+			define_method(filepath_method) do
+				return FileTest.send(filetest_method, self)
+			end
+		end
+
+		define_filetest_method :empty?, :zero?
+		alias :zero? :empty?
 	end
 
 	module SearchMethods

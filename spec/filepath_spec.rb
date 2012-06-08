@@ -878,7 +878,33 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::ContentTests
+	describe FilePath::ContentTests do
+		describe "#empty?" do
+			let(:ph) { @root / 'd1' / 'test-empty' }
+
+			before(:each) do
+				ph.should_not exist
+				ph.touch
+			end
+
+			after(:each) do
+				File.delete(ph) if File.exists?(ph)
+			end
+
+			it "says that an empty file is empty" do
+				ph.should be_empty
+			end
+
+			it "says that a non-empyt file is not empty" do
+				ph.open('w') { |f| f << "abc" }
+				ph.should_not be_empty
+			end
+
+			it "says that </dev/null> is empty" do
+				'/dev/null'.as_path.should be_empty
+			end
+		end
+	end
 
 	describe FilePath::SearchMethods do
 		describe "#entries" do
