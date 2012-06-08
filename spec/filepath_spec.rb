@@ -699,17 +699,17 @@ describe FilePath do
 	end
 
 	describe FilePath::FilesystemChanges do
+		let(:ph) { @root / 'd1' / 'test-file' }
+
+		before(:each) do
+			ph.should_not exist
+		end
+
+		after(:each) do
+			File.delete(ph) if File.exists?(ph)
+		end
+
 		describe "#touch" do
-			let(:ph) { @root / 'd1' / 'test-touch' }
-
-			before(:each) do
-				ph.should_not exist
-			end
-
-			after(:each) do
-				File.delete(ph) if File.exists?(ph)
-			end
-
 			it "creates an empty file" do
 				ph.touch
 				ph.should exist
@@ -757,17 +757,21 @@ describe FilePath do
 	end
 
 	describe FilePath::ContentInfo do
+		let(:ph) { @root / 'd1' / 'test-file' }
+
+		before(:each) do
+			ph.should_not exist
+		end
+
+		after(:each) do
+			File.delete(ph) if File.exists?(ph)
+		end
+
 		describe "#read" do
-			let(:ph) { @root / 'd1' / 'test-read' }
 			let(:content) { "a"*20 + "b"*10 + "c"*5 }
 
 			before(:each) do
-				ph.should_not exist
 				ph.open('w') { |f| f << content }
-			end
-
-			after(:each) do
-				File.delete(ph) if File.exists?(ph)
 			end
 
 			it "reads the complete content of a file" do
@@ -791,15 +795,8 @@ describe FilePath do
 		end
 
 		describe "#size" do
-			let(:ph) { @root / 'd1' / 'test-read' }
-
 			before(:each) do
-				ph.should_not exist
 				ph.touch
-			end
-
-			after(:each) do
-				File.delete(ph) if File.exists?(ph)
 			end
 
 			it "says that an empty file contains 0 bytes" do
@@ -819,16 +816,19 @@ describe FilePath do
 	end
 
 	describe FilePath::ContentChanges do
+		let(:ph) { @root / 'd1' / 'test-file' }
+
+		before(:each) do
+			ph.should_not exist
+		end
+
+		after(:each) do
+			File.delete(ph) if File.exists?(ph)
+		end
+
 		describe "#open" do
-			let(:ph) { @root / 'd1' / 'test-open' }
-
 			before(:each) do
-				ph.should_not exist
 				ph.touch
-			end
-
-			after(:each) do
-				File.delete(ph) if File.exists?(ph)
 			end
 
 			it "opens files" do
@@ -852,16 +852,10 @@ describe FilePath do
 		end
 
 		describe "#truncate" do
-			let(:ph) { @root / 'd1' / 'test-read' }
 			let(:content) { "a"*20 + "b"*10 + "c"*5 }
 
 			before(:each) do
-				ph.should_not exist
 				ph.open('w') { |f| f << content }
-			end
-
-			after(:each) do
-				File.delete(ph) if File.exists?(ph)
 			end
 
 			it "truncates a file to 0 bytes" do
@@ -879,16 +873,19 @@ describe FilePath do
 	end
 
 	describe FilePath::ContentTests do
+		let(:ph) { @root / 'd1' / 'test-file' }
+
+		before(:each) do
+			ph.should_not exist
+		end
+
+		after(:each) do
+			File.delete(ph) if File.exists?(ph)
+		end
+
 		describe "#empty?" do
-			let(:ph) { @root / 'd1' / 'test-empty' }
-
 			before(:each) do
-				ph.should_not exist
 				ph.touch
-			end
-
-			after(:each) do
-				File.delete(ph) if File.exists?(ph)
 			end
 
 			it "says that an empty file is empty" do
