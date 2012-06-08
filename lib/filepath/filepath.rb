@@ -902,7 +902,7 @@ class FilePath
 	module ContentTests
 		extend MethodDelegation
 
-		define_filetest_method :empty?, :zero?
+		define_file_method :empty?, :zero?
 		alias :zero? :empty?
 	end
 
