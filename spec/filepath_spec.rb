@@ -841,6 +841,7 @@ describe FilePath do
 
 	describe FilePath::ContentChanges do
 		let(:ph) { @root / 'd1' / 'test-file' }
+		let(:content) { "a"*20 + "b"*10 + "c"*5 }
 
 		before(:each) do
 			ph.should_not exist
@@ -875,9 +876,35 @@ describe FilePath do
 			end
 		end
 
-		describe "#truncate" do
-			let(:content) { "a"*20 + "b"*10 + "c"*5 }
+		describe "#write" do
+			it "writes data passed as argument" do
+				ph.write(content)
 
+				ph.read.should == content
+			end
+
+			it "overwrites an existing file" do
+				ph.write(content * 2)
+				ph.size.should eq(content.length * 2)
+
+				ph.write(content)
+				ph.size.should eq(content.length)
+
+				ph.read.should == content
+			end
+		end
+
+		describe "#append" do
+			it "appends data to an existing file" do
+				ph.write(content)
+				ph.append(content)
+
+				ph.size.should eq(content.length * 2)
+				ph.read.should == content * 2
+			end
+		end
+
+		describe "#truncate" do
 			before(:each) do
 				ph.open('w') { |f| f << content }
 			end

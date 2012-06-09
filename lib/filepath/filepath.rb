@@ -68,8 +68,6 @@ class FilePath
 		return FilePath.join(self, *extra_paths)
 	end
 
-	alias :append :join
-
 
 	# An alias for {FilePath#/}.
 	#
@@ -889,6 +887,18 @@ class FilePath
 		extend MethodDelegation
 
 		define_io_method :open
+
+		def write(content)
+			open('w') do |file|
+				file.write(content)
+			end
+		end
+
+		def append(content)
+			open('a') do |file|
+				file.write(content)
+			end
+		end
 
 		define_io_method :file_truncate, :truncate
 
