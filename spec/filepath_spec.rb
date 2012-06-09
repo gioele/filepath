@@ -734,30 +734,6 @@ describe FilePath do
 				after_stat.mtime.should be_between(before_time, after_time)
 			end
 		end
-
-		describe "#readlines" do
-			let(:line) { "abcd12" }
-			let(:lines) { Array.new(3) { line } }
-
-			it "reads all the lines in the file" do
-				ph.open('w') { |file| file << lines.join("\n") }
-				readlines = ph.readlines
-
-				readlines.should have(3).lines
-				readlines.all? { |l| l.chomp.should == line }
-			end
-
-			it "read lines separated by arbitrary separators" do
-				sep = ','
-
-				ph.open('w') { |file| file << lines.join(sep) }
-				readlines = ph.readlines(sep)
-
-				readlines.should have(3).lines
-				readlines[0..-2].all? { |l| l.should == line + sep}
-				readlines.last.should == line
-			end
-		end
 	end
 
 	describe FilePath::FilesystemTests do
@@ -815,6 +791,30 @@ describe FilePath do
 				end
 
 				sum.should == content
+			end
+		end
+
+		describe "#readlines" do
+			let(:line) { "abcd12" }
+			let(:lines) { Array.new(3) { line } }
+
+			it "reads all the lines in the file" do
+				ph.open('w') { |file| file << lines.join("\n") }
+				readlines = ph.readlines
+
+				readlines.should have(3).lines
+				readlines.all? { |l| l.chomp.should == line }
+			end
+
+			it "read lines separated by arbitrary separators" do
+				sep = ','
+
+				ph.open('w') { |file| file << lines.join(sep) }
+				readlines = ph.readlines(sep)
+
+				readlines.should have(3).lines
+				readlines[0..-2].all? { |l| l.should == line + sep}
+				readlines.last.should == line
 			end
 		end
 
