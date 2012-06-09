@@ -961,6 +961,9 @@ class FilePath
 	end
 
 	module EnvironmentInfo
+		def FilePath.getwd
+			return Dir.getwd.as_path
+		end
 	end
 
 	include MetadataInfo
@@ -976,6 +979,4 @@ class FilePath
 	include ContentTests
 
 	include SearchMethods
-
-	include EnvironmentInfo
 end
