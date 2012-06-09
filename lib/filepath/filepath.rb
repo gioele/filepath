@@ -880,6 +880,8 @@ class FilePath
 			alias :binread :read
 		end
 
+		define_io_method :readlines
+
 		define_io_method :size
 	end
 
