@@ -163,8 +163,8 @@ class FilePath
 	#
 	#     tmp_dir.relative_to_file(rc_file) #=> <../../tmp>
 	#
-	# @param [FilePath, String] base the file to use as base for the
-	#                                relative path
+	# @param [FilePath, String] base_file the file to use as base for the
+	#                                     relative path
 	#
 	# @return [FilePath] the relative path
 	#
