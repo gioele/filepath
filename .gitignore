@@ -1,4 +1,5 @@
-/announcement.txt
+/.bundle/
+/Gemfile.lock
 /coverage/
 /doc/
 /pkg/

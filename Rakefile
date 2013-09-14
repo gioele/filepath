@@ -1,27 +1,13 @@
 # This is free software released into the public domain (CC0 license).
 
-begin
-	require 'bones'
-rescue LoadError
-	abort '### Please install the "bones" gem ###'
-end
-
-Bones {
-	name     'filepath'
-	authors  'Gioele Barabucci'
-	email    'gioele@svario.it'
-	url      'http://github.com/gioele/filepath'
-
-	version  '0.6.dev'
-
-	ignore_file  '.gitignore'
-
-	depend_on 'bones-rspec', :development => true
-}
+require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
 
 require File.join(File.dirname(__FILE__), 'spec/tasks')
 
-task :default => 'spec:run'
-task 'gem:release' => 'spec:run'
+RSpec::Core::RakeTask.new
 
-task 'spec:run' => 'spec:fixtures:gen'
+task :default => :spec
+task :release => :spec
+
+task :spec => 'spec:fixtures:gen'

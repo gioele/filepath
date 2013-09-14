@@ -1,5 +1,7 @@
 # This is free software released into the public domain (CC0 license).
 
+require 'rake/clean'
+
 FIXTURES_DIR = File.join(%w{spec fixtures})
 FIXTURES_FAKE_ENTRIES = [
 	'd1',
