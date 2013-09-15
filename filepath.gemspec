@@ -8,16 +8,13 @@ Gem::Specification.new do |spec|
 	spec.version       = "0.7.dev"
 	spec.authors       = ["Gioele Barabucci"]
 	spec.email         = ["gioele@svario.it"]
-	spec.summary       = "filepath is a small library that helps dealing with files, " +
-	                     "directories and paths in general; a modern replacement for " +
-			     "the standard Pathname."
-	spec.description   = "filepath is built around two main classes: `FilePath`, that " +
-	                     "represents paths, and `FilePathList`, lists of paths. The " +
-			     "instances of these classes are immutable objects with dozens " +
-			     "of convience methods for common operations such as calculating " +
+	spec.summary       = "A small library to manipulate paths; a modern replacement " +
+			     "for the standard Pathname."
+	spec.description   = "The Filepath class provides immutable objects with dozens " +
+			     "of convenience methods for common operations such as calculating " +
 			     "relative paths, concatenating paths, finding all the files in " +
-			     "a directory or modifing all the extensions of a list of file "
-			     "names at once."
+			     "a directory or modifying all the extensions of a list of " +
+			     "filenames at once."
 	spec.homepage      = "http://github.com/gioele/filepath"
 	spec.license       = "CC0"
 

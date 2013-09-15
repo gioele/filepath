@@ -1,14 +1,14 @@
 FilePath
 ========
 
-filepath is a small library that helps dealing with files, directories and
-paths in general; a modern replacement for the standard Pathname.
+filepath is a small library to manipulate paths; a modern replacement
+for the standard Pathname.
 
-filepath is built around two main classes: `FilePath`, that represents paths,
-and `FilePathList`, lists of paths. The instances of these classes are
-immutable objects with dozens of convience methods for common operations such
-as calculating relative paths, concatenating paths, finding all the files in
-a directory or modifing all the extensions of a list of file names at once.
+filepath is built around two main classes: `Filepath`, that represents paths,
+and `FilepathList`, lists of paths. These classes provide immutable objects
+with dozens of convenience methods for common operations such as calculating
+relative paths, concatenating paths, finding all the files in a directory or
+modifying all the extensions of a list of filenames at once.
 
 
 Features and examples
@@ -18,7 +18,7 @@ The main purpose of FilePath is to able to write
 
     require __FILE__.as_path / 'spec' / 'tasks'
 
-instad of cumbersome code like
+instead of cumbersome code like
 
     require File.join(File.dirname(__FILE__), ['spec', 'tasks'])
 
