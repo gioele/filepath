@@ -2,18 +2,18 @@
 
 require File.join(File.dirname(__FILE__), 'spec_helper')
 
-describe FilePath do
+describe Filepath do
 	before(:all) do
-		@root = FilePath.new(FIXTURES_DIR)
+		@root = Filepath.new(FIXTURES_DIR)
 	end
 
 	it "can be created from a string" do
-		FilePath.new("foo").should be_a FilePath
+		Filepath.new("foo").should be_a Filepath
 	end
 
-	it "can be created from another FilePath" do
-		orig = FilePath.new("foo")
-		FilePath.new(orig).should be_a FilePath
+	it "can be created from another Filepath" do
+		orig = Filepath.new("foo")
+		Filepath.new(orig).should be_a Filepath
 	end
 
 	describe "#/" do
@@ -26,23 +26,23 @@ describe FilePath do
 		]
 		test_data.each do |base, extra, result|
 			it "concatenates `#{base}` and `#{extra}` (as String) into `#{result}`" do
-				ph = FilePath.new(base) / extra
+				ph = Filepath.new(base) / extra
 				ph.should == result
 			end
 		end
 
 		test_data.each do |base, extra, result|
-			it "concatenates `#{base}` and `#{extra}` (as FilePath) into `#{result}`" do
-				ph = FilePath.new(base) / FilePath.new(extra)
+			it "concatenates `#{base}` and `#{extra}` (as Filepath) into `#{result}`" do
+				ph = Filepath.new(base) / Filepath.new(extra)
 				ph.should == result
 			end
 		end
 	end
 
 	describe "#+" do
-		it "is deprecated but performs as FilePath#/" do
-			p1 = FilePath.new("a")
-			p2 = FilePath.new("b")
+		it "is deprecated but performs as Filepath#/" do
+			p1 = Filepath.new("a")
+			p2 = Filepath.new("b")
 
 			p1.should_receive(:warn).with(/is deprecated/)
 			(p1 + p2).should == (p1 / p2)
@@ -74,7 +74,7 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "says that `#{result}` is the filename of `#{path}`" do
-				ph = FilePath.new(path)
+				ph = Filepath.new(path)
 				ph.filename.should == result
 			end
 		end
@@ -90,7 +90,7 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "says that `#{result}` is the parent dir of `#{path}`" do
-				ph = FilePath.new(path)
+				ph = Filepath.new(path)
 				ph.parent_dir.should == result
 			end
 		end
@@ -108,7 +108,7 @@ describe FilePath do
 		]
 		test_data.each do |path, base, result|
 			it "says that `#{path}` relative to `#{base}` is `#{result}`" do
-				ph = FilePath.new(path)
+				ph = Filepath.new(path)
 				ph.relative_to(base).should == result
 			end
 		end
@@ -121,7 +121,7 @@ describe FilePath do
 		]
 		test_data2.each do |path, base|
 			it "raise an exception because `#{path}` and `#{base}` have different prefixes" do
-				ph = FilePath.new(path)
+				ph = Filepath.new(path)
 				expect { ph.relative_to(base) }.to raise_error(ArgumentError)
 			end
 		end
@@ -137,7 +137,7 @@ describe FilePath do
 		]
 		test_data.each do |path, base, result|
 			it "says that `#{path}` relative to the file `#{base}` is `#{result}`" do
-				ph = FilePath.new(path)
+				ph = Filepath.new(path)
 				ph.relative_to_file(base).should == result
 			end
 		end
@@ -151,7 +151,7 @@ describe FilePath do
 		]
 		test_data.each do |base, new, result|
 			it "changes `#{base}` + `#{new}` into `#{result}`" do
-				ph = FilePath.new(base)
+				ph = Filepath.new(base)
 				ph.with_filename(new).should == result
 			end
 		end
@@ -169,7 +169,7 @@ describe FilePath do
 		]
 		test_data.each do |path, ext|
 			it "says that `#{path}` has extension `#{ext}`" do
-				FilePath.new(path).extension.should == ext
+				Filepath.new(path).extension.should == ext
 			end
 		end
 	end
@@ -182,7 +182,7 @@ describe FilePath do
 		]
 		with_extension.each do |path|
 			it "says that <#{path}> has an extension" do
-				FilePath.new(path).extension?.should be_true
+				Filepath.new(path).extension?.should be_true
 			end
 		end
 
@@ -193,7 +193,7 @@ describe FilePath do
 		]
 		no_extension.each do |path|
 			it "says that <#{path}> has no extension" do
-				FilePath.new(path).extension?.should be_false
+				Filepath.new(path).extension?.should be_false
 			end
 		end
 
@@ -205,12 +205,12 @@ describe FilePath do
 		]
 		extension_data.each do |path, ext|
 			it "says that <#{path}> extesions is #{ext.inspect}" do
-				FilePath.new(path).extension?(ext).should be_true
+				Filepath.new(path).extension?(ext).should be_true
 			end
 		end
 
 		it "says that `foo.bar` extension is not `baz`" do
-			FilePath.new('foo.bar').extension?('baz').should be_false
+			Filepath.new('foo.bar').extension?('baz').should be_false
 		end
 	end
 
@@ -224,7 +224,7 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "replaces `#{path}` with `baz` into `#{result}`" do
-				new = FilePath.new(path).with_extension('baz')
+				new = Filepath.new(path).with_extension('baz')
 				new.basename.to_s.should == result
 			end
 		end
@@ -240,7 +240,7 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "turns `#{path}` into `#{result}`" do
-				new = FilePath.new(path).without_extension
+				new = Filepath.new(path).without_extension
 				new.basename.to_s.should == result
 			end
 		end
@@ -248,47 +248,47 @@ describe FilePath do
 
 	describe "=~" do
 		it "matches `/foo/bar` with /foo/" do
-			FilePath.new('/foo/bar').should =~ /foo/
+			Filepath.new('/foo/bar').should =~ /foo/
 		end
 
 		it "does not match `/foo/bar` with /baz/" do
-			FilePath.new('/foo/bar').should_not =~ /baz/
+			Filepath.new('/foo/bar').should_not =~ /baz/
 		end
 
 		it "matches `/foo/bar` with /o\\/ba" do
-			FilePath.new('/foo/bar').should =~ /o\/b/
+			Filepath.new('/foo/bar').should =~ /o\/b/
 		end
 
 		it "matches `/foo/bar/../quux` with /foo\\/quux/" do
-			FilePath.new('/foo/bar/../quux').should =~ /foo\/quux/
+			Filepath.new('/foo/bar/../quux').should =~ /foo\/quux/
 		end
 	end
 
 	describe "#root?" do
 		it "says that </> points to the root directory" do
-			FilePath.new('/').should be_root
+			Filepath.new('/').should be_root
 		end
 
 		it "says that </..> points to the root directory" do
-			FilePath.new('/..').should be_root
+			Filepath.new('/..').should be_root
 		end
 
 		it "says that <a/b> does not point to the root directory" do
-			FilePath.new('a/b').should_not be_root
+			Filepath.new('a/b').should_not be_root
 		end
 
 		it "says that </foo> does not point to the root directory" do
-			FilePath.new('/foo/bar').should_not be_root
+			Filepath.new('/foo/bar').should_not be_root
 		end
 	end
 
 	describe "#absolute?" do
 		it "says that `/foo/bar` is absolute" do
-			FilePath.new('/foo/bar').should be_absolute
+			Filepath.new('/foo/bar').should be_absolute
 		end
 
 		it "sasys that `foo/bar` is not absolute" do
-			FilePath.new('foo/bar').should_not be_absolute
+			Filepath.new('foo/bar').should_not be_absolute
 		end
 	end
 
@@ -308,7 +308,7 @@ describe FilePath do
 		]
 		test_data.each do |path, result|
 			it "turns `#{path}` into `#{result}`" do
-				FilePath.new(path).normalized.to_raw_string.should == result
+				Filepath.new(path).normalized.to_raw_string.should == result
 			end
 		end
 	end
@@ -316,7 +316,7 @@ describe FilePath do
 	describe "#each_segment" do
 		it "goes through all the segments of an absolute path" do
 			steps = []
-			FilePath.new("/a/b/c").each_segment do |seg|
+			Filepath.new("/a/b/c").each_segment do |seg|
 				steps << seg
 			end
 
@@ -329,7 +329,7 @@ describe FilePath do
 
 		it "goes through all the segments of a relative path" do
 			steps = []
-			FilePath.new("a/b/c").each_segment do |seg|
+			Filepath.new("a/b/c").each_segment do |seg|
 				steps << seg
 			end
 
@@ -340,7 +340,7 @@ describe FilePath do
 		end
 
 		it "returns the path itself" do
-			path = FilePath.new("/a/b/c/")
+			path = Filepath.new("/a/b/c/")
 			path.each_segment { }.should be(path)
 		end
 	end
@@ -348,7 +348,7 @@ describe FilePath do
 	describe "#ascend" do
 		it "goes through all the segments of an absolute path" do
 			steps = []
-			FilePath.new("/a/b/c").ascend do |seg|
+			Filepath.new("/a/b/c").ascend do |seg|
 				steps << seg
 			end
 
@@ -361,7 +361,7 @@ describe FilePath do
 
 		it "goes through all the segments of a relative path" do
 			steps = []
-			FilePath.new("a/b/c").ascend do |seg|
+			Filepath.new("a/b/c").ascend do |seg|
 				steps << seg
 			end
 
@@ -372,7 +372,7 @@ describe FilePath do
 		end
 
 		it "returns the path itself" do
-			path = FilePath.new("/a/b/c/")
+			path = Filepath.new("/a/b/c/")
 			path.ascend { }.should be(path)
 		end
 	end
@@ -380,7 +380,7 @@ describe FilePath do
 	describe "#descend" do
 		it "goes through all the segments of an absolute path" do
 			steps = []
-			FilePath.new("/a/b/c").descend do |seg|
+			Filepath.new("/a/b/c").descend do |seg|
 				steps << seg
 			end
 
@@ -393,7 +393,7 @@ describe FilePath do
 
 		it "goes through all the segments of a relative path" do
 			steps = []
-			FilePath.new("a/b/c").descend do |seg|
+			Filepath.new("a/b/c").descend do |seg|
 				steps << seg
 			end
 
@@ -404,26 +404,26 @@ describe FilePath do
 		end
 
 		it "returns the path itself" do
-			path = FilePath.new("/a/b/c/")
+			path = Filepath.new("/a/b/c/")
 			path.descend { }.should be(path)
 		end
 	end
 
 	describe "#to_s" do
 		it "works on computed absolute paths" do
-			(FilePath.new('/') / 'a' / 'b').to_s.should eql('/a/b')
+			(Filepath.new('/') / 'a' / 'b').to_s.should eql('/a/b')
 		end
 
 		it "works on computed relative paths" do
-			(FilePath.new('a') / 'b').to_s.should eql('a/b')
+			(Filepath.new('a') / 'b').to_s.should eql('a/b')
 		end
 
 		it "returns normalized paths" do
-			FilePath.new("/foo/bar/..").to_s.should eql('/foo')
+			Filepath.new("/foo/bar/..").to_s.should eql('/foo')
 		end
 
 		it "returns '.' for empty paths" do
-			FilePath.new('').to_s.should eql('.')
+			Filepath.new('').to_s.should eql('.')
 		end
 	end
 
@@ -447,7 +447,7 @@ describe FilePath do
 		]
 		test_data.each do |ver1, ver2|
 			it "says that `#{ver1}` is equivalent to `#{ver2}`" do
-				ph = FilePath.new(ver1)
+				ph = Filepath.new(ver1)
 				ph.should == ver2
 			end
 		end
@@ -474,7 +474,7 @@ describe FilePath do
 			p1.should_not eql(p2)
 		end
 
-		it "does not match objects that are not FilePaths" do
+		it "does not match objects that are not Filepaths" do
 			p1 = '/foo/bar/baz'.as_path
 			p2 = '/foo/bar/baz'
 
@@ -524,7 +524,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::MetadataInfo do
+	describe Filepath::MetadataInfo do
 		describe "#stat" do
 			it "returns a stat for the file" do
 				(@root / 'd1').stat.should be_directory
@@ -550,7 +550,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::MetadataChanges do
+	describe Filepath::MetadataChanges do
 		describe "#chtime" do
 			it "change mtime" do
 				ph = @root / 'f1'
@@ -580,7 +580,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::MetadataTests do
+	describe Filepath::MetadataTests do
 		describe "#file?" do
 			it "says that `f1` is a file" do
 				(@root / 'f1').should be_file
@@ -675,7 +675,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::FilesystemInfo do
+	describe Filepath::FilesystemInfo do
 		describe "#absolute_path" do
 			test_data = [
 				['d1/l11', File.expand_path('d1/l11', FIXTURES_DIR), FIXTURES_DIR],
@@ -684,7 +684,7 @@ describe FilePath do
 			test_data.each do |path, abs_path, cwd|
 				it "resolves <#{path}> to <#{abs_path}> (in #{cwd})" do
 					Dir.chdir(cwd) do # FIXME
-						FilePath.new(path).absolute_path.should == abs_path
+						Filepath.new(path).absolute_path.should == abs_path
 					end
 				end
 			end
@@ -697,7 +697,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::FilesystemChanges do
+	describe Filepath::FilesystemChanges do
 		let(:ph) { @root / 'd1' / 'test-file' }
 
 		before(:each) do
@@ -735,7 +735,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::FilesystemTests do
+	describe Filepath::FilesystemTests do
 		describe "mountpoint?" do
 			it "says that </proc> is a mount point" do
 				"/proc".as_path.should be_mountpoint
@@ -755,7 +755,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::ContentInfo do
+	describe Filepath::ContentInfo do
 		let(:ph) { @root / 'd1' / 'test-file' }
 
 		before(:each) do
@@ -838,7 +838,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::ContentChanges do
+	describe Filepath::ContentChanges do
 		let(:ph) { @root / 'd1' / 'test-file' }
 		let(:content) { "a"*20 + "b"*10 + "c"*5 }
 
@@ -922,7 +922,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::ContentTests do
+	describe Filepath::ContentTests do
 		let(:ph) { @root / 'd1' / 'test-file' }
 
 		before(:each) do
@@ -953,7 +953,7 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::SearchMethods do
+	describe Filepath::SearchMethods do
 		describe "#entries" do
 			it "raises when path is not a directory" do
 				expect { (@root / 'f1').entries(:files) }.to raise_error(Errno::ENOTDIR)
@@ -1030,14 +1030,14 @@ describe FilePath do
 		end
 	end
 
-	describe FilePath::EnvironmentInfo
+	describe Filepath::EnvironmentInfo
 end
 
 describe String do
 	describe "#as_path" do
-		it "generates a FilePath from a String" do
+		it "generates a Filepath from a String" do
 			path = "/a/b/c".as_path
-			path.should be_a(FilePath)
+			path.should be_a(Filepath)
 			path.should eq("/a/b/c")
 		end
 	end
@@ -1045,9 +1045,9 @@ end
 
 describe Array do
 	describe "#as_path" do
-		it "generates a FilePath from a String" do
+		it "generates a Filepath from a String" do
 			path = ['/', 'a', 'b', 'c'].as_path
-			path.should be_a(FilePath)
+			path.should be_a(Filepath)
 			path.should eq("/a/b/c")
 		end
 	end

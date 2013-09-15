@@ -1,7 +1,7 @@
 # This is free software released into the public domain (CC0 license).
 
 
-class FilePathList
+class FilepathList
 	include Enumerable
 
 	SEPARATOR = ':'.freeze
@@ -13,7 +13,7 @@ class FilePathList
 
 	def select_entries(type)
 		raw_entries = @entries.delete_if { |e| !e.send(type.to_s + '?') }
-		return FilePathList.new(raw_entries)
+		return FilepathList.new(raw_entries)
 	end
 
 	def files
@@ -33,26 +33,26 @@ class FilePathList
 	end
 
 	def +(extra_entries)
-		return FilePathList.new(@entries + extra_entries.to_a)
+		return FilepathList.new(@entries + extra_entries.to_a)
 	end
 
 	def -(others)
 		remaining_entries = @entries - others.as_path_list.to_a
 
-		return FilePathList.new(remaining_entries)
+		return FilepathList.new(remaining_entries)
 	end
 
 	def <<(extra_path)
-		return FilePathList.new(@entries + [extra_path.as_path])
+		return FilepathList.new(@entries + [extra_path.as_path])
 	end
 
 	def *(other_list)
-		if !other_list.is_a? FilePathList
-			other_list = FilePathList.new(Array(other_list))
+		if !other_list.is_a? FilepathList
+			other_list = FilepathList.new(Array(other_list))
 		end
 		other_entries = other_list.entries
 		paths = @entries.product(other_entries).map { |p1, p2| p1 / p2 }
-		return FilePathList.new(paths)
+		return FilepathList.new(paths)
 	end
 
 	def remove_common_segments
@@ -75,10 +75,10 @@ class FilePathList
 
 		remaining_segs = all_segs.map { |segs| segs[idx_different..-1] }
 
-		return FilePathList.new(remaining_segs)
+		return FilepathList.new(remaining_segs)
 	end
 
-	# @return [FilePathList] the path list itself
+	# @return [FilepathList] the path list itself
 
 	def as_path_list
 		self
@@ -130,7 +130,7 @@ class FilePathList
 	module EntriesMethods
 		def map(&block)
 			mapped_entries = @entries.map(&block)
-			return FilePathList.new(mapped_entries)
+			return FilepathList.new(mapped_entries)
 		end
 
 		def select(pattern = nil, &block)
@@ -140,7 +140,7 @@ class FilePathList
 
 			remaining_entries = @entries.select { |e| block.call(e) }
 
-			return FilePathList.new(remaining_entries)
+			return FilepathList.new(remaining_entries)
 		end
 
 		def exclude(pattern = nil, &block)

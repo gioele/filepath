@@ -1,11 +1,11 @@
 # This is free software released into the public domain (CC0 license).
 
 
-class FilePath
+class Filepath
 	SEPARATOR = '/'.freeze
 
 	def initialize(path)
-		if path.is_a? FilePath
+		if path.is_a? Filepath
 			@segments = path.segments
 		elsif path.is_a? Array
 			@segments = path
@@ -18,11 +18,11 @@ class FilePath
 	attr_reader :segments
 
 
-	# Creates a FilePath joining the given segments.
+	# Creates a Filepath joining the given segments.
 	#
-	# @return [FilePath] a FilePath created joining the given segments
+	# @return [Filepath] a Filepath created joining the given segments
 
-	def FilePath.join(*raw_paths)
+	def Filepath.join(*raw_paths)
 		if (raw_paths.count == 1) && (raw_paths.first.is_a? Array)
 			raw_paths = raw_paths.first
 		end
@@ -32,7 +32,7 @@ class FilePath
 		segs = []
 		paths.each { |path| segs += path.segments }
 
-		return FilePath.new(segs)
+		return Filepath.new(segs)
 	end
 
 
@@ -42,40 +42,40 @@ class FilePath
 	#
 	#    "a/b".as_path / "c" #=> <a/b/c>
 	#
-	# @example Append another FilePath
+	# @example Append another Filepath
 	#
 	#    home = (ENV["HOME"] || "/root").as_path
 	#    conf_dir = '.config'.as_path
 	#
 	#    home / conf_dir #=> </home/user/.config>
 	#
-	# @param [FilePath, String] extra_path the path to be appended to the
+	# @param [Filepath, String] extra_path the path to be appended to the
 	#                                      current path
 	#
-	# @return [FilePath] a new path with the given path appended
+	# @return [Filepath] a new path with the given path appended
 
 	def /(extra_path)
-		return FilePath.join(self, extra_path)
+		return Filepath.join(self, extra_path)
 	end
 
 
 	# Append multiple paths to the current path.
 	#
-	# @return [FilePath] a new path with all the paths appended
+	# @return [Filepath] a new path with all the paths appended
 
 	def join(*extra_paths)
-		return FilePath.join(self, *extra_paths)
+		return Filepath.join(self, *extra_paths)
 	end
 
 
-	# An alias for {FilePath#/}.
+	# An alias for {Filepath#/}.
 	#
-	# @deprecated Use the {FilePath#/} (slash) method instead. This method
+	# @deprecated Use the {Filepath#/} (slash) method instead. This method
 	#             does not show clearly if a path is being added or if a
 	#             string should be added to the filename
 
 	def +(extra_path)
-		warn "FilePath#+ is deprecated, use FilePath#/ instead."
+		warn "Filepath#+ is deprecated, use Filepath#/ instead."
 		return self / extra_path
 	end
 
@@ -102,10 +102,10 @@ class FilePath
 	#
 	#     tmp_dir.relative_to(home_dir) #=> <../../tmp>
 	#
-	# @param [FilePath, String] base the directory to use as base for the
+	# @param [Filepath, String] base the directory to use as base for the
 	#                                relative path
 	#
-	# @return [FilePath] the relative path
+	# @return [Filepath] the relative path
 	#
 	# @note this method operates on the normalized paths
 	#
@@ -140,7 +140,7 @@ class FilePath
 		segs = [".."] * num_parent_dirs + left_in_self
 		normalized_segs = normalized_relative_segs(segs)
 
-		return FilePath.join(normalized_segs)
+		return Filepath.join(normalized_segs)
 	end
 
 	# Calculates the relative path from a given file.
@@ -162,10 +162,10 @@ class FilePath
 	#
 	#     tmp_dir.relative_to_file(rc_file) #=> <../../tmp>
 	#
-	# @param [FilePath, String] base_file the file to use as base for the
+	# @param [Filepath, String] base_file the file to use as base for the
 	#                                     relative path
 	#
-	# @return [FilePath] the relative path
+	# @return [Filepath] the relative path
 	#
 	# @see #relative_to
 
@@ -179,7 +179,7 @@ class FilePath
 	# The filename is the component of a path that appears after the last
 	# path separator.
 	#
-	# @return [FilePath] the filename
+	# @return [Filepath] the filename
 
 	def filename
 		segs = self.normalized_segments
@@ -197,7 +197,7 @@ class FilePath
 
 	# The dir that contains the file
 	#
-	# @return [FilePath] the path of the parent dir
+	# @return [Filepath] the path of the parent dir
 
 	def parent_dir
 		return self / '..'
@@ -212,10 +212,10 @@ class FilePath
 	#     style = post.with_filename("style.css")
 	#     style.to_s #=> "posts/2012-02-16-hello-world/style.css"
 	#
-	# @param [FilePath, String] new_path the path to be put in place of
+	# @param [Filepath, String] new_path the path to be put in place of
 	#                                    the current filename
 	#
-	# @return [FilePath] a path with the supplied path instead of the
+	# @return [Filepath] a path with the supplied path instead of the
 	#                    current filename
 	#
 	# @see #filename
@@ -311,7 +311,7 @@ class FilePath
 	#
 	#     @param [String] new_ext the new extension
 	#
-	#     @return [FilePath] a new path with the replaced extension
+	#     @return [Filepath] a new path with the replaced extension
 	#
 	# @overload with_extension
 	#     Removes the file extension if present.
@@ -325,7 +325,7 @@ class FilePath
 	#         post_url = post_file.with_extension(nil)
 	#         post_url.to_s #=> "post/welcome"
 	#
-	#     @return [FilePath] a new path without the extension
+	#     @return [Filepath] a new path without the extension
 
 	def with_extension(new_ext) # FIXME: accept block
 		orig_filename = filename.to_s
@@ -349,7 +349,7 @@ class FilePath
 		segs = @segments[0..-2]
 		segs << new_filename
 
-		return FilePath.new(segs)
+		return Filepath.new(segs)
 	end
 
 	alias :replace_extension :with_extension
@@ -365,7 +365,7 @@ class FilePath
 	#     post_url = post_file.without_extension
 	#     post_url.to_s #=> "post/welcome"
 	#
-	# @return [FilePath] a new path without the extension
+	# @return [Filepath] a new path without the extension
 	#
 	# @see #with_extension
 
@@ -454,11 +454,11 @@ class FilePath
 	#
 	# FIXME: document what normal form is.
 	#
-	# @return [FilePath] a new path that does not contain `.` or `..`
+	# @return [Filepath] a new path that does not contain `.` or `..`
 	#                    segments.
 
 	def normalized
-		return FilePath.join(self.normalized_segments)
+		return Filepath.join(self.normalized_segments)
 	end
 
 	alias :normalised :normalized
@@ -483,7 +483,7 @@ class FilePath
 	#
 	# @yield [path] TODO
 	#
-	# @return [FilePath] the path itself.
+	# @return [Filepath] the path itself.
 	#
 	# @see #ascend
 	# @see #descend
@@ -519,7 +519,7 @@ class FilePath
 	#
 	# @yield [path] TODO
 	#
-	# @return [FilePath] the path itself.
+	# @return [Filepath] the path itself.
 	#
 	# @see #each_segment
 	# @see #descend
@@ -553,7 +553,7 @@ class FilePath
 	#
 	# @yield [path] TODO
 	#
-	# @return [FilePath] the path itself.
+	# @return [Filepath] the path itself.
 	#
 	# @see #each_segment
 	# @see #ascend
@@ -568,7 +568,7 @@ class FilePath
 		max_depth ||= @segments.length
 		(1..max_depth).send(method) do |limit|
 			segs = @segments.take(limit)
-			yield FilePath.join(segs)
+			yield Filepath.join(segs)
 		end
 
 		return self
@@ -609,7 +609,7 @@ class FilePath
 	end
 
 
-	# @return [FilePath] the path itself.
+	# @return [Filepath] the path itself.
 	def as_path
 		self
 	end
@@ -639,7 +639,7 @@ class FilePath
 	#     path1 == path2.parent_dir #=> true
 	#     path1 == path3            #=> true
 	#
-	# @param [FilePath, String] other the other path to compare
+	# @param [Filepath, String] other the other path to compare
 	#
 	# @return [boolean] whether the other path is equivalent to the current path
 	#
@@ -928,7 +928,7 @@ class FilePath
 			glob /= pattern
 
 			raw_entries = Dir.glob(glob)
-			entries = FilePathList.new(raw_entries)
+			entries = FilepathList.new(raw_entries)
 
 			return entries
 		end
@@ -960,7 +960,7 @@ class FilePath
 	end
 
 	module EnvironmentInfo
-		def FilePath.getwd
+		def Filepath.getwd
 			return Dir.getwd.as_path
 		end
 	end

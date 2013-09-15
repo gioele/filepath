@@ -1,4 +1,4 @@
-FilePath
+filepath
 ========
 
 filepath is a small library to manipulate paths; a modern replacement
@@ -14,7 +14,7 @@ modifying all the extensions of a list of filenames at once.
 Features and examples
 ---------------------
 
-The main purpose of FilePath is to able to write
+The main purpose of Filepath is to able to write
 
     require __FILE__.as_path / 'spec' / 'tasks'
 
@@ -22,7 +22,7 @@ instead of cumbersome code like
 
     require File.join(File.dirname(__FILE__), ['spec', 'tasks'])
 
-The main features of FilePath are…
+The main features of Filepath are…
 
 ### Path concatenation
 
@@ -52,7 +52,7 @@ The main features of FilePath are…
 
 ### Path traversal
 
-    file_dir = FilePath.new("/srv/example.org/web/html/")
+    file_dir = Filepath.new("/srv/example.org/web/html/")
     file_dir.descend do |path|
         is = path.readable? ? "is" : "is not!"
 
