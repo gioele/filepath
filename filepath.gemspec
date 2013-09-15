@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
 	spec.name          = "filepath"
-	spec.version       = "0.6.dev"
+	spec.version       = "0.6"
 	spec.authors       = ["Gioele Barabucci"]
 	spec.email         = ["gioele@svario.it"]
 	spec.summary       = "filepath is a small library that helps dealing with files, " +
