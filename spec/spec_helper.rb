@@ -5,8 +5,8 @@ $LOAD_PATH.unshift(LIB_DIR) unless $LOAD_PATH.include?(LIB_DIR)
 
 require 'filepath'
 
+require File.join(File.dirname(__FILE__), 'fixtures')
+
 RSpec.configure do |config|
 	config.filter_run_excluding :broken => true
 end
-
-FIXTURES_DIR = File.join(%w{spec fixtures})
