@@ -14,7 +14,7 @@ describe FilepathList do
 			paths = %w{a/b c/d e/f}
 			list = FilepathList.new(paths)
 
-			list.should have(3).items
+			list.size.should eq(3)
 			list.each { |path| path.should be_a(Filepath) }
 		end
 
@@ -22,7 +22,7 @@ describe FilepathList do
 			paths = %w{a/b c/d e/f}.map(&:as_path)
 			list = FilepathList.new(paths)
 
-			list.should have(3).items
+			list.size.should eq(3)
 			list.each { |path| path.should be_a(Filepath) }
 		end
 
@@ -30,7 +30,7 @@ describe FilepathList do
 			paths = [%w{a b}, %w{c d}, %w{e f}]
 			list = FilepathList.new(paths)
 
-			list.should have(3).items
+			list.size.should eq(3)
 			list.each { |path| path.should be_a(Filepath) }
 		end
 	end
@@ -49,7 +49,7 @@ describe FilepathList do
 			list2 = FilepathList.new(%w{d e})
 
 			list = list1 + list2
-			list.should have(5).items
+			list.size.should eq(5)
 			list[0].should eq('a')
 			list[1].should eq('b')
 			list[2].should eq('c')
@@ -63,7 +63,7 @@ describe FilepathList do
 			list1 = FilepathList.new(%w{a/b /a/c e/d})
 			list2 = list1 - %w{a/b e/d}
 
-			list2.should have(1).item
+			list2.size.should eq(1)
 			list2[0].should eq('/a/c')
 		end
 	end
@@ -73,8 +73,8 @@ describe FilepathList do
 			list1 = FilepathList.new(%w{a/b /c/d})
 			list2 = list1 << "e/f"
 
-			list1.should have(2).items
-			list2.should have(3).items
+			list1.size.should eq(2)
+			list2.size.should eq(3)
 
 			list2[0].should eq('a/b')
 			list2[1].should eq('/c/d')
@@ -93,7 +93,7 @@ describe FilepathList do
 				all_paths = p1.product(p2).map { |x| x.join('/') }
 
 				list = list1 * list2
-				list.should have(6).items
+				list.size.should eq(6)
 				list.should include(*all_paths)
 			end
 
@@ -102,7 +102,7 @@ describe FilepathList do
 				p2 = "abc"
 
 				list = FilepathList.new(p1) * p2
-				list.should have(3).items
+				list.size.should eq(3)
 				list.should include(*%w{a/abc b/abc c/abc})
 			end
 
@@ -111,7 +111,7 @@ describe FilepathList do
 				p2 = Filepath.new("x")
 
 				list = FilepathList.new(p1) * p2
-				list.should have(3).items
+				list.size.should eq(3)
 				list.should include(*%w{a/x b/x c/x})
 			end
 
@@ -120,7 +120,7 @@ describe FilepathList do
 				p2 = ["1", "2"]
 
 				list = FilepathList.new(p1) * p2
-				list.should have(6).items
+				list.size.should eq(6)
 				list.should include(*%w{a/1 b/1 a/2 b/2 c/1 c/2})
 			end
 		end
@@ -131,7 +131,7 @@ describe FilepathList do
 			paths = %w{a/b/x1 a/b/x2 a/b/x3}
 			list = FilepathList.new(paths).remove_common_segments
 
-			list.should have(3).items
+			list.size.should eq(3)
 			list.should include(*%w{x1 x2 x3})
 		end
 
@@ -139,7 +139,7 @@ describe FilepathList do
 			list1 = FilepathList.new(%w{a/b/x1 a/b/c/x2 a/b/d/e/x3})
 			list2 = list1.remove_common_segments
 
-			list2.should have(3).items
+			list2.size.should eq(3)
 			list2.should include(*%w{x1 c/x2 d/e/x3})
 		end
 
@@ -197,21 +197,21 @@ describe FilepathList do
 		describe "#all?" do
 			it "checks whether a block applies to a list" do
 				ok = list.all? { |path| path.extension? }
-				ok.should be_true
+				ok.should be true
 			end
 		end
 
 		describe "#any?" do
 			it "check whether a block does not apply to any path" do
 				ok = list.any? { |path| path.basename == "a.foo" }
-				ok.should be_true
+				ok.should be true
 			end
 		end
 
 		describe "#none?" do
 			it "check whether a block does not apply to any path" do
 				ok = list.none? { |path| path.absolute? }
-				ok.should be_true
+				ok.should be true
 			end
 		end
 	end
@@ -224,14 +224,14 @@ describe FilepathList do
 				remaining = list.select(/bar$/)
 
 				remaining.should be_a FilepathList
-				remaining.should have(2).items
+				remaining.size.should eq(2)
 				remaining.each { |path| path.extension.should == 'bar' }
 			end
 
 			it "keeps all the paths for which the block returns true" do
 				remaining = list.select { |ph| ph.extension?('bar') }
 
-				remaining.should have(2).items
+				remaining.size.should eq(2)
 				remaining.each { |ph| ph.extension.should == 'bar' }
 			end
 		end
@@ -241,7 +241,7 @@ describe FilepathList do
 				remaining = list.exclude(/bar$/)
 
 				remaining.should be_a FilepathList
-				remaining.should have(3).items
+				remaining.size.should eq(3)
 				remaining.each { |path| path.extension.should == 'foo' }
 			end
 
@@ -249,7 +249,7 @@ describe FilepathList do
 				remaining = list.exclude { |path| path.extension?('bar') }
 
 				remaining.should be_a FilepathList
-				remaining.should have(3).items
+				remaining.size.should eq(3)
 				remaining.each { |path| path.extension.should == 'foo' }
 			end
 		end
@@ -259,8 +259,8 @@ describe FilepathList do
 				mapped = list.map { |path| path.remove_extension }
 
 				mapped.should be_a FilepathList
-				mapped.should have(list.size).items
-				mapped.each { |path| path.extension?.should be_false }
+				mapped.size.should eq(list.size)
+				mapped.each { |path| path.extension?.should be false }
 			end
 		end
 	end
