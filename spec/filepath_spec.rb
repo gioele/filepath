@@ -182,7 +182,7 @@ describe Filepath do
 		]
 		with_extension.each do |path|
 			it "says that <#{path}> has an extension" do
-				Filepath.new(path).extension?.should be_true
+				Filepath.new(path).extension?.should be true
 			end
 		end
 
@@ -193,7 +193,7 @@ describe Filepath do
 		]
 		no_extension.each do |path|
 			it "says that <#{path}> has no extension" do
-				Filepath.new(path).extension?.should be_false
+				Filepath.new(path).extension?.should be false
 			end
 		end
 
@@ -205,12 +205,12 @@ describe Filepath do
 		]
 		extension_data.each do |path, ext|
 			it "says that <#{path}> extesions is #{ext.inspect}" do
-				Filepath.new(path).extension?(ext).should be_true
+				Filepath.new(path).extension?(ext).should be true
 			end
 		end
 
 		it "says that `foo.bar` extension is not `baz`" do
-			Filepath.new('foo.bar').extension?('baz').should be_false
+			Filepath.new('foo.bar').extension?('baz').should be false
 		end
 	end
 
@@ -320,7 +320,7 @@ describe Filepath do
 				steps << seg
 			end
 
-			steps.should have(4).items
+			steps.size.should eq(4)
 			steps[0].should eq("/")
 			steps[1].should eq("a")
 			steps[2].should eq("b")
@@ -333,7 +333,7 @@ describe Filepath do
 				steps << seg
 			end
 
-			steps.should have(3).items
+			steps.size.should eq(3)
 			steps[0].should eq("a")
 			steps[1].should eq("b")
 			steps[2].should eq("c")
@@ -352,7 +352,7 @@ describe Filepath do
 				steps << seg
 			end
 
-			steps.should have(4).items
+			steps.size.should eq(4)
 			steps[0].should eq("/a/b/c")
 			steps[1].should eq("/a/b")
 			steps[2].should eq("/a")
@@ -365,7 +365,7 @@ describe Filepath do
 				steps << seg
 			end
 
-			steps.should have(3).items
+			steps.size.should eq(3)
 			steps[0].should eq("a/b/c")
 			steps[1].should eq("a/b")
 			steps[2].should eq("a")
@@ -384,7 +384,7 @@ describe Filepath do
 				steps << seg
 			end
 
-			steps.should have(4).items
+			steps.size.should eq(4)
 			steps[0].should eq("/")
 			steps[1].should eq("/a")
 			steps[2].should eq("/a/b")
@@ -397,7 +397,7 @@ describe Filepath do
 				steps << seg
 			end
 
-			steps.should have(3).items
+			steps.size.should eq(3)
 			steps[0].should eq("a")
 			steps[1].should eq("a/b")
 			steps[2].should eq("a/b/c")
@@ -801,7 +801,7 @@ describe Filepath do
 				ph.open('w') { |file| file << lines.join("\n") }
 				readlines = ph.readlines
 
-				readlines.should have(3).lines
+				readlines.size.should eq(3)
 				readlines.all? { |l| l.chomp.should == line }
 			end
 
@@ -811,7 +811,7 @@ describe Filepath do
 				ph.open('w') { |file| file << lines.join(sep) }
 				readlines = ph.readlines(sep)
 
-				readlines.should have(3).lines
+				readlines.size.should eq(3)
 				readlines[0..-2].all? { |l| l.should == line + sep}
 				readlines.last.should == line
 			end
@@ -964,68 +964,68 @@ describe Filepath do
 			it "finds all paths matching a glob string" do
 				list = @root.find('*1')
 
-				list.should have(8).items
+				list.size.should eq(8)
 				list.each { |path| path.should =~ /1/ }
 			end
 
 			it "finds all paths matching a Regex" do
 				list = @root.find(/2/)
 
-				list.should have(6).items
+				list.size.should eq(6)
 				list.each { |path| path.should =~ /2/ }
 			end
 
 			it "finds all paths for which the block returns true" do
 				list = @root.find { |path| path.directory? }
 
-				list.should have(9).items
+				list.size.should eq(9)
 				list.each { |path| path.filename.should =~ /^d/ }
 			end
 		end
 
 		describe "#files" do
 			it "finds 1 file in the root directory" do
-				@root.files.should have(1).item
+				@root.files.size.should eq(1)
 			end
 
 			it "finds 3 files in the root directory and its sub directories" do
-				@root.files(true).should have(3).item
+				@root.files(true).size.should eq(3)
 			end
 
 			it "finds 2 files in directory <d1>" do
-				(@root / 'd1').files.should have(2).items
+				(@root / 'd1').files.size.should eq(2)
 			end
 
 			it "finds no files in directory <d1/d12>" do
-				(@root / 'd1' / 'd12').files.should have(0).items
+				(@root / 'd1' / 'd12').files.size.should eq(0)
 			end
 		end
 
 		describe "#directories" do
 			it "finds 4 directories in the root directory" do
-				@root.directories.should have(4).items
+				@root.directories.size.should eq(4)
 			end
 
 			it "finds 9 directories in the root directory and its sub directories" do
-				@root.directories(true).should have(9).item
+				@root.directories(true).size.should eq(9)
 			end
 
 			it "finds 2 directories in directory <d2>" do
-				(@root / 'd2').directories.should have(2).items
+				(@root / 'd2').directories.size.should eq(2)
 			end
 
 			it "finds no directories in directory <d1/d13>" do
-				(@root / 'd1' / 'd13').directories.should have(0).items
+				(@root / 'd1' / 'd13').directories.size.should eq(0)
 			end
 		end
 
 		describe "#links" do
 			it "finds no links in the root directory" do
-				@root.links.should have(0).items
+				@root.links.size.should be(0)
 			end
 
 			it "finds 1 link in directory <d1>" do
-				(@root / 'd1').links.should have(1).item
+				(@root / 'd1').links.size.should eq(1)
 			end
 		end
 	end
