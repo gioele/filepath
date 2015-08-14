@@ -182,7 +182,7 @@ describe Filepath do
 		]
 		with_extension.each do |path|
 			it "says that <#{path}> has an extension" do
-				Filepath.new(path).extension?.should be_true
+				Filepath.new(path).extension?.should be true
 			end
 		end
 
@@ -193,7 +193,7 @@ describe Filepath do
 		]
 		no_extension.each do |path|
 			it "says that <#{path}> has no extension" do
-				Filepath.new(path).extension?.should be_false
+				Filepath.new(path).extension?.should be false
 			end
 		end
 
@@ -205,12 +205,12 @@ describe Filepath do
 		]
 		extension_data.each do |path, ext|
 			it "says that <#{path}> extesions is #{ext.inspect}" do
-				Filepath.new(path).extension?(ext).should be_true
+				Filepath.new(path).extension?(ext).should be true
 			end
 		end
 
 		it "says that `foo.bar` extension is not `baz`" do
-			Filepath.new('foo.bar').extension?('baz').should be_false
+			Filepath.new('foo.bar').extension?('baz').should be false
 		end
 	end
 

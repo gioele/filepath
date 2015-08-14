@@ -197,21 +197,21 @@ describe FilepathList do
 		describe "#all?" do
 			it "checks whether a block applies to a list" do
 				ok = list.all? { |path| path.extension? }
-				ok.should be_true
+				ok.should be true
 			end
 		end
 
 		describe "#any?" do
 			it "check whether a block does not apply to any path" do
 				ok = list.any? { |path| path.basename == "a.foo" }
-				ok.should be_true
+				ok.should be true
 			end
 		end
 
 		describe "#none?" do
 			it "check whether a block does not apply to any path" do
 				ok = list.none? { |path| path.absolute? }
-				ok.should be_true
+				ok.should be true
 			end
 		end
 	end
@@ -260,7 +260,7 @@ describe FilepathList do
 
 				mapped.should be_a FilepathList
 				mapped.should have(list.size).items
-				mapped.each { |path| path.extension?.should be_false }
+				mapped.each { |path| path.extension?.should be false }
 			end
 		end
 	end
