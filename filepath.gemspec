@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
 	spec.name          = "filepath"
-	spec.version       = "0.7"
+	spec.version       = "0.8.dev"
 	spec.authors       = ["Gioele Barabucci"]
 	spec.email         = ["gioele@svario.it"]
 	spec.summary       = "A small library to manipulate paths; a modern replacement " +
