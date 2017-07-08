@@ -100,8 +100,8 @@ Requirements
 The `filepath` library does not require any external library: it relies
 complitely on functionalities available in the Ruby's core classes.
 
-The `filepath` library has been tested and found compatible with Ruby 1.8.7,
-Ruby 1.9.3 and JRuby 1.6.
+The `filepath` library has been tested and found compatible with Ruby 1.9.3,
+Ruby 2.3 and JRuby 9.1.x.x.
 
 
 Installation
