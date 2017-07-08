@@ -377,6 +377,44 @@ class Filepath
 	alias :remove_extension :without_extension
 
 
+	# Adds an extension to the current file extension
+	#
+	# @see #extension
+	# @see #extension?
+	# @see #with_extension
+	# @see #without_extension
+	#
+	# Replaces the file extension with the supplied one. If the file
+	# has no extension it is added to the filename together with a dot.
+	#
+	# @example Addition of an extension
+	#
+	#     tar_path = "archives/docs.tar".as_path
+	#     compressed_path = tar_path.add_extension("gz")
+	#     compressed_path.to_s #=> "archives/docs.tar.gz"
+	#
+	# @example Addition of an extension to a filename without extensions
+	#
+	#     dir_path = "archives/2016".as_path
+	#     zip_path = dir_path.add_extension("zip")
+	#     zip_path.to_s #=> "archives/2016.zip"
+	#
+	# @param [String] extra_ext the extension to add
+	#
+	# @return [Filepath] a new path with the given extension added to the existing extensions
+
+	def add_extension(extra_ext)
+		if !self.extension.nil?
+			old_ext = self.extension
+			new_ext = old_ext + '.' + extra_ext
+		else
+			new_ext = extra_ext
+		end
+
+		return self.with_extension(new_ext)
+	end
+
+
 	# Matches a pattern against this path.
 	#
 	# @param [Regexp, Object] pattern the pattern to match against

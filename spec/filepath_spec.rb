@@ -246,6 +246,20 @@ describe Filepath do
 		end
 	end
 
+	describe "#add_extension" do
+		test_data = [
+			['foo', 'e1', 'foo.e1'],
+			['foo.e1', 'e2', 'foo.e1.e2'],
+			['foo.e1.e2', 'e3', 'foo.e1.e2.e3'],
+		]
+		test_data.each do |path, ext, result|
+			it "turns `#{path}` with `#{ext}` into `#{result}`" do
+				new = Filepath.new(path).add_extension(ext)
+				new.basename.to_s.should == result
+			end
+		end
+	end
+
 	describe "=~" do
 		it "matches `/foo/bar` with /foo/" do
 			Filepath.new('/foo/bar').should =~ /foo/
