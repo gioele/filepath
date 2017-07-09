@@ -684,6 +684,10 @@ class Filepath
 	# @note this method compares the normalized versions of the paths
 
 	def ==(other)
+		if !other.respond_to?(:as_path)
+			return false
+		end
+
 		return self.normalized_segments == other.as_path.normalized_segments
 	end
 
