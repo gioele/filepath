@@ -1,4 +1,3 @@
-
 class Filepath
 	SEPARATOR = '/'.freeze
 
@@ -809,6 +808,18 @@ class Filepath
 				return FileTest.send(filetest_method, self)
 			end
 		end
+
+		# @private
+		def define_fileutils_method(filepath_method, fileutils_method = nil)
+			if !defined?(FileUtils)
+				return
+			end
+
+			fileutils_method ||= filepath_method
+			define_method(filepath_method) do
+				return FileUtils.send(fileutils_method, self)
+			end
+		end
 	end
 
 	module MetadataInfo
@@ -906,10 +917,25 @@ class Filepath
 	end
 
 	module FilesystemChanges
+		extend MethodDelegation
+
 		def touch
 			self.open('a') do ; end
 			File.utime(File.atime(self), Time.now, self)
 		end
+
+		def touch_p
+			self.parent_dir.mkdir_p
+			self.touch
+		end
+
+		define_fileutils_method :mkdir
+		define_fileutils_method :mkdir_p
+
+		define_fileutils_method :rm
+		define_fileutils_method :rm_f
+		define_fileutils_method :rm_r
+		define_fileutils_method :rm_rf
 	end
 
 	module FilesystemTests
