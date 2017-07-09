@@ -327,6 +327,18 @@ describe Filepath do
 		end
 	end
 
+	describe "#expanded_tilde" do
+		it "expands the tilde to the user home directory" do
+			home = ENV['HOME']
+			ENV['HOME'] = '/home/mel'
+			path = "~/.config".as_path
+			path_expanded = path.expanded_tilde
+			ENV['HOME'] = home
+
+			path_expanded.should eq("/home/mel/.config")
+		end
+	end
+
 	describe "#each_segment" do
 		it "goes through all the segments of an absolute path" do
 			steps = []

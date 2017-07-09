@@ -499,6 +499,26 @@ class Filepath
 
 	alias :normalised :normalized
 
+
+	# Expands tilde to the user's home directory
+	#
+	# The tilde character (i.e. `~`) will be expanded into the
+	# path of the user's home directory according to the rules
+	# of [`File#expand_path`](https://ruby-doc.org/core/File.html#method-c-expand_path).
+	#
+	# @example
+	#
+	#     path = "~/.config".as_path
+	#     path.expanded_tilde #=> </home/mel/.config>
+	#
+	# @return [Filepath] a new path in which the tilde character
+	#                    has been expanded into the path of the
+	#                    user's home directory.
+
+	def expanded_tilde
+		return Filepath.new(File.expand_path(self))
+	end
+
 	# Iterates over all the path segments, from the leftmost to the
 	# rightmost.
 	#
