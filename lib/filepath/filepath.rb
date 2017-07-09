@@ -1,5 +1,3 @@
-# This is free software released into the public domain (CC0 license).
-
 
 class Filepath
 	SEPARATOR = '/'.freeze
@@ -1021,3 +1019,5 @@ class Filepath
 
 	include SearchMethods
 end
+
+# This is free software released into the public domain (CC0 license).
