@@ -28,6 +28,7 @@ class Filepath
 
 		segs = []
 		paths.each { |path| segs += path.segments }
+		segs.reject!.with_index { |seg, idx| !idx.zero? && seg == '/' }
 
 		return Filepath.new(segs)
 	end

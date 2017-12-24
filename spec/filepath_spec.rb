@@ -22,6 +22,7 @@ describe Filepath do
 			['foo', '.', 'foo'],
 			['foo', '..', '.'],
 			['foo/bar', 'baz', 'foo/bar/baz'],
+			['foo', '/bar', 'foo/bar'],
 			['', 'foo/bar', './foo/bar'],
 		]
 		test_data.each do |base, extra, result|
