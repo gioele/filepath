@@ -1014,7 +1014,7 @@ class Filepath
 			glob /= '**' if recursive
 			glob /= pattern
 
-			raw_entries = Dir.glob(glob)
+			raw_entries = Dir.glob(glob, File::FNM_DOTMATCH).reject { |e| e =~  %r{(^|/)(\.|\.\.)$} }
 			entries = FilepathList.new(raw_entries)
 
 			return entries
