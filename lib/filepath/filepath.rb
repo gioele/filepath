@@ -875,8 +875,8 @@ class Filepath
 
 		define_filetest_method :chardev?
 
-		define_filetest_method :exists?
-		alias :exist? :exists?
+		define_filetest_method :exist?
+		alias :exists? :exist?
 
 		define_filetest_method :readable?
 
@@ -941,7 +941,7 @@ class Filepath
 
 	module FilesystemTests
 		def mountpoint?
-			if !directory? || !exists?
+			if !directory? || !exist?
 				return false
 			end
 
