@@ -732,7 +732,7 @@ describe Filepath do
 		end
 
 		after(:each) do
-			File.delete(ph) if File.exists?(ph)
+			File.delete(ph) if File.exist?(ph)
 		end
 
 		describe "#touch" do
@@ -790,7 +790,7 @@ describe Filepath do
 		end
 
 		after(:each) do
-			File.delete(ph) if File.exists?(ph)
+			File.delete(ph) if File.exist?(ph)
 		end
 
 		describe "#read" do
@@ -874,7 +874,7 @@ describe Filepath do
 		end
 
 		after(:each) do
-			File.delete(ph) if File.exists?(ph)
+			File.delete(ph) if File.exist?(ph)
 		end
 
 		describe "#open" do
@@ -957,7 +957,7 @@ describe Filepath do
 		end
 
 		after(:each) do
-			File.delete(ph) if File.exists?(ph)
+			File.delete(ph) if File.exist?(ph)
 		end
 
 		describe "#empty?" do
